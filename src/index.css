@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*{
+  box-sizing: inherit; /*Kế thừa html*/
+}
+
+html {
+  height: 100%;
+  line-height: 1.2;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Helvetical Neue', Arial, Helvetica, sans-serif;
+  font-weight: 400;
+}
