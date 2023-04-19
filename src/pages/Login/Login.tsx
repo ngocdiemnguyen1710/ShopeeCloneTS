@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 const Login = () => {
   return (
     <div className=' bg-main-orange'>
-      <div className='mx-auto min-h-[600px] max-w-6xl bg-register-img bg-contain bg-center bg-no-repeat px-4'>
+      <div className='container min-h-[600px] bg-register-img bg-contain bg-center bg-no-repeat'>
         <div className='grid grid-cols-1 py-12 lg:grid-cols-5 lg:py-32 lg:pr-20'>
           <div className='lg:col-span-2 lg:col-start-4'>
             <form className='rounded bg-white p-6 shadow-sm lg:ml-10'>
@@ -22,6 +22,7 @@ const Login = () => {
               <div className='mt-3'>
                 <input
                   type='Password'
+                  autoComplete='on'
                   name='password'
                   className='w-full rounded-sm border border-gray-300 p-2.5 text-sm outline-none focus:border-gray-500 focus:shadow-sm'
                   placeholder='Mật khẩu'

@@ -6,7 +6,7 @@ const HeaderRegister = () => {
   const path = location.pathname
   return (
     <header className='py-5'>
-      <div className='mx-auto max-w-7xl px-4'>
+      <div className='container'>
         <div className='flex items-center justify-between'>
           <nav className='flex items-end'>
             <Link to={'/'}>
