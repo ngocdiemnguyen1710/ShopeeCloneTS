@@ -229,7 +229,7 @@ const followUs = [
 const Footer = () => {
   return (
     <footer className='bg-footer'>
-      <div className='mx-auto max-w-7xl px-4'>
+      <div className='container'>
         <div className='grid grid-cols-2 lg:grid-cols-5'>
           <div className='p-1.5'>
             <div className='mb-5 mt-10 text-xs font-bold'>CHĂM SÓC KHÁCH HÀNG</div>
