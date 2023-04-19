@@ -3,25 +3,25 @@ import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { FaFacebook } from 'react-icons/fa'
 import { FcGoogle } from 'react-icons/fc'
-import { getRules } from 'src/utils/rules'
+import { Schema, schema } from 'src/utils/rules'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { Check, Eye, EyeSlash } from 'src/components/IconSvg'
+import InputForm from 'src/components/InputForm'
 
-interface FormData {
-  email: string
-  password: string
-  confirm_password: string
-}
+type FormData = Schema
+
 const Register = () => {
   const [viewPassword, setViewPassword] = useState<boolean>(false)
   const [viewConfirmPassword, setViewConfirmPassword] = useState<boolean>(false)
+
   const {
     register,
     handleSubmit,
     getValues,
     formState: { errors }
-  } = useForm<FormData>()
-  console.log(getValues('email'))
-  const rules = getRules(getValues)
+  } = useForm<FormData>({
+    resolver: yupResolver(schema)
+  })
 
   const onSubmit = handleSubmit((data) => {
     console.log(data)
@@ -35,38 +35,28 @@ const Register = () => {
             <form className='rounded bg-white p-6 shadow-sm lg:ml-10' onSubmit={onSubmit} noValidate>
               <div className='text-xl'>Đăng ký</div>
               <div className='mt-6'>
-                <div
-                  className={`flex items-center border border-gray-300 focus:border-gray-500 focus:shadow-sm ${
-                    errors?.email?.message && 'border-error-box bg-error-input focus:border-error-box'
-                  }`}
+                <InputForm
+                  type='email'
+                  placeholder='Email'
+                  register={register}
+                  autoComplete='on'
+                  errorMessage={errors?.email?.message}
+                  name='email'
                 >
-                  <input
-                    type='email'
-                    className='w-full flex-1 rounded-sm bg-transparent p-2.5 text-sm outline-none'
-                    placeholder='Email'
-                    {...register('email', rules.email)}
-                  />
                   <div className='bg-transparent px-4'>
                     {!errors?.email?.message && getValues('email') && <Check className='flex h-4 w-4 items-center' />}
                   </div>
-                </div>
-                {errors?.email?.message && (
-                  <div className='mt-1 min-h-[1.25rem] text-xs text-red-600'>{errors?.email?.message}</div>
-                )}
+                </InputForm>
               </div>
               <div className='mt-2'>
-                <div
-                  className={`flex items-center border border-gray-300 focus:border-gray-500 focus:shadow-sm ${
-                    errors?.password?.message && 'border-error-box bg-error-input focus:border-error-box'
-                  }`}
+                <InputForm
+                  type={viewPassword ? 'text' : 'password'}
+                  placeholder='Mật khẩu'
+                  register={register}
+                  autoComplete='on'
+                  errorMessage={errors?.password?.message}
+                  name='password'
                 >
-                  <input
-                    type={viewPassword ? 'text' : 'password'}
-                    autoComplete='on'
-                    className='w-full flex-1 rounded-sm bg-transparent p-2.5 text-sm outline-none'
-                    placeholder='Mật khẩu'
-                    {...register('password', rules.password)}
-                  />
                   <button
                     className='bg-transparent px-4'
                     onClick={(e) => {
@@ -76,25 +66,17 @@ const Register = () => {
                   >
                     {viewPassword ? <Eye className={'h-4 w-4'} /> : <EyeSlash className={'h-4 w-4'} />}
                   </button>
-                </div>
-
-                {errors?.password?.message && (
-                  <div className='mt-1 min-h-[1.25rem] text-xs text-red-600'>{errors?.password?.message}</div>
-                )}
+                </InputForm>
               </div>
               <div className='mt-2'>
-                <div
-                  className={`flex items-center border border-gray-300 focus:border-gray-500 focus:shadow-sm ${
-                    errors?.confirm_password?.message && 'border-error-box bg-error-input focus:border-error-box'
-                  }`}
+                <InputForm
+                  type={viewConfirmPassword ? 'text' : 'password'}
+                  placeholder='Nhập lại mật khẩu'
+                  register={register}
+                  autoComplete='on'
+                  errorMessage={errors?.confirm_password?.message}
+                  name='confirm_password'
                 >
-                  <input
-                    type={viewConfirmPassword ? 'text' : 'password'}
-                    autoComplete='on'
-                    className='w-full flex-1 rounded-sm bg-transparent p-2.5 text-sm outline-none'
-                    placeholder='Mật khẩu'
-                    {...register('confirm_password', rules.confirm_password)}
-                  />
                   <button
                     className='bg-transparent px-4'
                     onClick={(e) => {
@@ -104,10 +86,7 @@ const Register = () => {
                   >
                     {viewConfirmPassword ? <Eye className={'h-4 w-4'} /> : <EyeSlash className={'h-4 w-4'} />}
                   </button>
-                </div>
-                {errors?.confirm_password?.message && (
-                  <div className='mt-1 min-h-[1.25rem] text-xs text-red-600'>{errors?.confirm_password?.message}</div>
-                )}
+                </InputForm>
               </div>
               <div className='my-8'>
                 <button
