@@ -24,7 +24,9 @@ const InputForm = ({
   return (
     <>
       <div
-        className={`flex items-center border border-gray-300 focus:border-gray-500 focus:shadow-sm ${
+        className={`flex items-center border ${
+          !errorMessage && 'border-gray-300'
+        }  focus:border-gray-500 focus:shadow-sm ${
           errorMessage && 'border-error-box bg-error-input focus:border-error-box'
         }`}
       >
