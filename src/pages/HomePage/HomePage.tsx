@@ -1,7 +1,11 @@
-import React from 'react'
+import Banner from 'src/components/Banner/Banner'
 
 const HomePage = () => {
-  return <div>HomePage</div>
+  return (
+    <div className='bg-white py-7'>
+      <Banner />
+    </div>
+  )
 }
 
 export default HomePage

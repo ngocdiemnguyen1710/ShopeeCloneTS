@@ -24,6 +24,9 @@ module.exports = {
       },
       backgroundImage: {
         'register-img': "url('assets/images/background-register.png')"
+      },
+      fontSize: {
+        sm: '0.8125rem'
       }
     }
   },
