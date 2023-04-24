@@ -1,8 +1,8 @@
-import Banner from 'src/components/Banner/Banner'
+import Banner from 'src/components/Banner'
 
 const HomePage = () => {
   return (
-    <div className='bg-white py-7'>
+    <div>
       <Banner />
     </div>
   )
