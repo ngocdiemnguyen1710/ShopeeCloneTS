@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { FaFacebook } from 'react-icons/fa'
 import { RiInstagramFill } from 'react-icons/ri'
 import { ArrowDown, AvatarDefault, Bell, Cart, Language, Logo, SearchIcon, Support } from '../IconSvg'
+import Popper from '../Popper'
 
 const Header = () => {
   return (
@@ -37,10 +38,12 @@ const Header = () => {
             </Link>
           </div>
         </nav>
-        <nav className='flex text-sm'>
+        <nav className='flex gap-1 text-sm'>
           <div className='pr-1.5'>
             <Link to={'#'} className='flex items-center hover:brightness-90'>
-              <Bell className='mr-1 w-3.5 fill-current' />
+              <div>
+                <Bell className='mr-1 w-3.5 fill-current' />
+              </div>
               <span>Thông Báo</span>
             </Link>
           </div>
@@ -50,29 +53,51 @@ const Header = () => {
               <span>Hỗ trợ</span>
             </Link>
           </div>
-          <div className='px-1.5'>
-            <Link to={'#'} className='flex items-center hover:brightness-90'>
-              <Language className='mr-1' />
-              <span>Tiếng Việt</span>
-              <ArrowDown className='ml-1' />
-            </Link>
-          </div>
-          <div className='px-1.5'>
-            {/* <div className='flex items-center gap-1'>
-              <Link to={'#'} className='border-r border-[hsla(0,0%,100%,.22)] pr-2 hover:brightness-90'>
-                <span>Đăng Ký</span>
-              </Link>
-              <Link to='#' className='pl-1.5 hover:brightness-90'>
-                <span>Đăng Nhập</span>
-              </Link>
-            </div> */}
 
-            <Link to={'#'} className='flex items-center gap-1 hover:brightness-90'>
-              <div className='h-5 w-5 rounded-full bg-[#f5f5f5] p-1'>
-                <AvatarDefault className='stroke-[#c6c6c6]' />
+          <Popper iconLeft={<Language className='' />} iconRight={<ArrowDown className='ml-1' />} name={'Tiếng Việt'}>
+            <ul className='flex min-w-[12.5rem] flex-col items-center justify-start rounded-sm bg-white text-[#333] shadow-md'>
+              <li className='w-full cursor-pointer p-3 hover:text-main-orange'>
+                <span className=''>Tiếng Việt</span>
+              </li>
+              <li className='w-full cursor-pointer p-3 hover:text-main-orange'>
+                <span className=''>English</span>
+              </li>
+            </ul>
+          </Popper>
+          <div>
+            {/* <div className='px-1.5'>
+              <div className='flex items-center gap-1'>
+                <Link to={'#'} className='border-r border-[hsla(0,0%,100%,.22)] pr-2 hover:brightness-90'>
+                  <span>Đăng Ký</span>
+                </Link>
+                <Link to='#' className='pl-1.5 hover:brightness-90'>
+                  <span>Đăng Nhập</span>
+                </Link>
               </div>
-              <span>zinbu99</span>
-            </Link>
+            </div> */}
+            <Popper
+              iconLeft={<AvatarDefault className='stroke-[#c6c6c6]' />}
+              name={'zinbu99'}
+              className='h-5 w-5 rounded-full bg-[#f5f5f5] p-1'
+            >
+              <ul className='relative flex w-[9.375rem] flex-col items-center justify-start rounded-sm bg-white text-[#333] shadow-md'>
+                <li className='w-full cursor-pointer p-3 hover:bg-[#fafafa] hover:text-[#00bfa5]'>
+                  <Link to=''>
+                    <span className='capitalize'>Tài khoản của tôi</span>
+                  </Link>
+                </li>
+                <li className='w-full cursor-pointer p-3 hover:bg-[#fafafa] hover:text-[#00bfa5]'>
+                  <Link to=''>
+                    <span className='capitalize '>Đơn mua</span>
+                  </Link>
+                </li>
+                <li className='w-full cursor-pointer p-3 hover:bg-[#fafafa] hover:text-[#00bfa5]'>
+                  <Link to=''>
+                    <span className='capitalize'>Đăng xuất</span>
+                  </Link>
+                </li>
+              </ul>
+            </Popper>
           </div>
         </nav>
       </div>
@@ -83,18 +108,79 @@ const Header = () => {
           </Link>
           <form className='col-span-8'>
             <div className='flex h-full items-center rounded-sm bg-white p-1'>
-              <input className='flex-1 px-2  outline-none' placeholder='Deal 50%, Mua là có quà' />
+              <input className='flex-1 px-2 outline-none' placeholder='Deal 50%, Mua là có quà' />
               <button className='h-full rounded-sm bg-[#fb5533] px-6 hover:opacity-90'>
-                <SearchIcon className=' fill-white stroke-white' />
+                <SearchIcon className='fill-white stroke-white' />
               </button>
             </div>
           </form>
-          <Link to='' className='relative col-start-11 ml-5 flex items-end'>
-            <Cart className=' h-7 w-7' />
-            <div className='absolute right-5 top-2.5 flex h-5 w-7 items-center justify-center rounded-full border-[0.125rem] border-[#ee4d2d] bg-white py-2'>
-              <span className='text-sm text-main-orange'>72</span>
+          <Popper
+            renderProp={
+              <>
+                <Link to='' className='relative col-start-11 ml-5 flex h-full cursor-pointer items-end'>
+                  <Cart className='h-7 w-7' />
+                </Link>
+                <div className='absolute right-4 top-2 flex h-5 w-7 items-center justify-center rounded-full border-[0.125rem] border-[#ee4d2d] bg-white py-2'>
+                  <span className='text-sm text-main-orange'>72</span>
+                </div>
+              </>
+            }
+          >
+            <div className='w-[400px] rounded-sm bg-white shadow-md'>
+              <div className=' w-full p-3 text-sm capitalize text-gray-300'>Sản phẩm mới thêm</div>
+              <ul className='flex w-full flex-col items-center justify-start bg-white text-[#333]'>
+                <li className='w-full cursor-pointer px-3 py-3 hover:bg-[#fafafa]'>
+                  <Link to=''>
+                    <div className='flex justify-between'>
+                      <div className='flex'>
+                        <div className='border-px h-11 w-11 flex-shrink-0 border-gray-1'>
+                          <img src='' alt='' className='h-full w-full' />
+                        </div>
+                        <span className='... ml-2 max-w-[225px] flex-grow truncate text-sm'>
+                          Kem nền BB O.TWO.O che khuyết điểm tự nhiên kiềm dầu không bết dính 60g với 4 màu tùy chọn
+                        </span>
+                      </div>
+                      <div className='text-sm text-main-orange'>đ52.000</div>
+                    </div>
+                  </Link>
+                </li>
+                <li className='w-full cursor-pointer px-3 py-3 hover:bg-[#fafafa]'>
+                  <Link to=''>
+                    <div className='flex justify-between'>
+                      <div className='flex'>
+                        <div className='border-px h-11 w-11 flex-shrink-0 border-gray-1'>
+                          <img src='' alt='' className='h-full w-full' />
+                        </div>
+                        <span className='... ml-2 max-w-[225px] flex-grow truncate text-sm'>
+                          Kem nền BB O.TWO.O che khuyết điểm tự nhiên kiềm dầu không bết dính 60g với 4 màu tùy chọn
+                        </span>
+                      </div>
+                      <div className='text-sm text-main-orange'>đ52.000</div>
+                    </div>
+                  </Link>
+                </li>
+                <li className='w-full cursor-pointer px-3 py-3 hover:bg-[#fafafa]'>
+                  <Link to=''>
+                    <div className='flex justify-between'>
+                      <div className='flex'>
+                        <div className='border-px h-11 w-11 flex-shrink-0 border-gray-1'>
+                          <img src='' alt='' className='h-full w-full' />
+                        </div>
+                        <span className='... ml-2 max-w-[225px] flex-grow truncate text-sm'>
+                          Kem nền BB O.TWO.O che khuyết điểm tự nhiên kiềm dầu không bết dính 60g với 4 màu tùy chọn
+                        </span>
+                      </div>
+                      <div className='text-sm text-main-orange'>đ52.000</div>
+                    </div>
+                  </Link>
+                </li>
+              </ul>
+              <div className='flex w-full items-center justify-between bg-[#fafafa] p-3'>
+                <div className='text-xs text-gray-600'>67 Thêm vào giỏ hàng</div>
+                <button className='rounded-sm bg-main-orange px-4 py-2 text-sm text-white'>Xem giỏ hàng</button>
+              </div>
             </div>
-          </Link>
+          </Popper>
         </div>
         <div className='grid grid-cols-11'>
           <div className='col-start-3 mt-1 text-white'>
