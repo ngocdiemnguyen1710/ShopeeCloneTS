@@ -7,13 +7,16 @@ import { FcGoogle } from 'react-icons/fc'
 import { Link } from 'react-router-dom'
 import { loginAccount } from 'src/apis/auth.api'
 import { Check, Eye, EyeSlash } from 'src/components/IconSvg'
-import InputForm from 'src/components/InputForm'
-import { ResponeApi } from 'src/types/utils.type'
+import Controls from 'src/components/controls/Controls'
+import { useAuth } from 'src/contexts/auth.context'
+import { User } from 'src/types/users.type'
+import { ErrorRespone } from 'src/types/utils.type'
 import { Schema, schema } from 'src/utils/rules'
 import { isAxiosErrorUnprocessableEntity } from 'src/utils/utils'
 
 type FormData = Omit<Schema, 'confirm_password'>
 const Login = () => {
+  const { setIsAuthenticated, setProfile } = useAuth()
   const [viewPassword, setViewPassword] = useState<boolean>(false)
   const loginSchema = schema.omit(['confirm_password'])
   const {
@@ -32,10 +35,11 @@ const Login = () => {
   const onSubmit = handleSubmit((data) => {
     loginAccountMutation.mutate(data, {
       onSuccess: (data) => {
-        console.log(data)
+        setIsAuthenticated(true)
+        setProfile(data.data.data.user)
       },
       onError: (error) => {
-        if (isAxiosErrorUnprocessableEntity<ResponeApi<FormData>>(error)) {
+        if (isAxiosErrorUnprocessableEntity<ErrorRespone<FormData>>(error)) {
           const formError = error.response?.data.data
           if (formError) {
             Object.keys(formError).forEach((key) => {
@@ -57,7 +61,7 @@ const Login = () => {
             <form className='rounded bg-white p-6 shadow-sm lg:ml-10' onSubmit={onSubmit} noValidate>
               <div className='text-xl'>Đăng nhập</div>
               <div className='mt-6'>
-                <InputForm
+                <Controls.InputForm
                   type='email'
                   placeholder='Email'
                   register={register}
@@ -68,10 +72,10 @@ const Login = () => {
                   <div className='bg-transparent px-4'>
                     {!errors?.email?.message && getValues('email') && <Check className='flex h-4 w-4 items-center' />}
                   </div>
-                </InputForm>
+                </Controls.InputForm>
               </div>
               <div className='mt-2'>
-                <InputForm
+                <Controls.InputForm
                   type={viewPassword ? 'text' : 'password'}
                   placeholder='Mật khẩu'
                   register={register}
@@ -88,18 +92,20 @@ const Login = () => {
                   >
                     {viewPassword ? <Eye className={'h-4 w-4'} /> : <EyeSlash className={'h-4 w-4'} />}
                   </button>
-                </InputForm>
+                </Controls.InputForm>
               </div>
               <div className='mb-4 mt-8'>
-                <button
+                <Controls.Button
                   className={`w-full rounded-sm py-2.5 text-sm uppercase text-white shadow-[0_1px_1px_rgba(0,0,0,.09)] hover:brightness-105 ${
-                    errors?.email?.message || errors?.password?.message
+                    errors?.email?.message || errors?.password?.message || loginAccountMutation.isLoading
                       ? 'cursor-not-allowed bg-main-orange opacity-75'
                       : 'bg-main-orange'
                   }`}
+                  isLoading={loginAccountMutation.isLoading}
+                  disabled={loginAccountMutation.isLoading}
                 >
                   Đăng nhập
-                </button>
+                </Controls.Button>
                 <div className='mt-2 flex items-center justify-between text-xs text-blue-800'>
                   <button>Quên mật khẩu</button>
                   <button
@@ -119,7 +125,7 @@ const Login = () => {
                   <div className='h-px w-full flex-1 bg-[#dbdbdb]'></div>
                 </div>
                 <div className='flex items-center'>
-                  <button
+                  <Controls.Button
                     className='m-1 flex h-[40px] w-full flex-1 items-center justify-center rounded-sm border border-gray-text hover:bg-slate-100'
                     onClick={(e) => {
                       e.preventDefault()
@@ -128,8 +134,9 @@ const Login = () => {
                   >
                     <FaFacebook className='text-color-blue mr-2 h-[20px] w-[20px] text-blue-600' />{' '}
                     <span className='text-sm'>Facebook</span>
-                  </button>
-                  <button
+                  </Controls.Button>
+
+                  <Controls.Button
                     className='m-1 flex h-[40px] w-full flex-1 items-center justify-center rounded-sm border border-gray-text hover:bg-slate-100'
                     onClick={(e) => {
                       e.preventDefault()
@@ -137,7 +144,7 @@ const Login = () => {
                     }}
                   >
                     <FcGoogle className='mr-2 h-[20px] w-[20px]' /> <span className='text-sm'>Google</span>
-                  </button>
+                  </Controls.Button>
                 </div>
                 <div className='mt-5 flex items-center justify-center text-sm'>
                   <p className='mr-1 text-gray-text'>Bạn mới biết đến Shopee?</p>{' '}

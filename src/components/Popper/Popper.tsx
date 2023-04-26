@@ -16,7 +16,7 @@ interface ProperProps {
 const Popper = ({ children, className, iconLeft, name, iconRight, src, renderProp }: ProperProps) => {
   const [isOpen, setIsOpen] = useState(false)
 
-  const arrowRef = useRef<HTMLElement>(null)
+  const arrowRef = useRef(null)
 
   const { x, y, strategy, refs, context } = useFloating({
     open: isOpen,
@@ -36,14 +36,14 @@ const Popper = ({ children, className, iconLeft, name, iconRight, src, renderPro
   const { getFloatingProps } = useInteractions([hover])
   return (
     <>
-      <div className='relative z-20 px-1.5' ref={refs.setReference} id={id}>
+      <div className='relative z-10 px-1.5' ref={refs.setReference} id={id}>
         {renderProp}
         <Link to={'#'} className='flex items-center gap-1 hover:brightness-90'>
           <div className={className}>
             {!src && iconLeft}
             {src && <img src={src} alt='avatar' />}
           </div>
-          {name && <span>{name}</span>}
+          {name && <span className='text-white'>{name}</span>}
           {iconRight}
         </Link>
 
@@ -66,14 +66,11 @@ const Popper = ({ children, className, iconLeft, name, iconRight, src, renderPro
               {...getFloatingProps()}
             >
               <FloatingArrow
+                ref={arrowRef}
                 context={context}
                 width={30}
                 fill='white'
-                style={{
-                  position: strategy,
-                  top: y ?? 0,
-                  right: x != null ? `${30}px` : ''
-                }}
+                staticOffset={renderProp ? '85%' : '70%'}
               />
               {children}
             </motion.div>

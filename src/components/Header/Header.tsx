@@ -3,22 +3,40 @@ import { FaFacebook } from 'react-icons/fa'
 import { RiInstagramFill } from 'react-icons/ri'
 import { ArrowDown, AvatarDefault, Bell, Cart, Language, Logo, SearchIcon, Support } from '../IconSvg'
 import Popper from '../Popper'
+import { useMutation } from '@tanstack/react-query'
+import { logoutAccount } from 'src/apis/auth.api'
+import { useAuth } from 'src/contexts/auth.context'
+import { path } from 'src/constants/path'
 
 const Header = () => {
+  const { isAuthenticated, setIsAuthenticated, profile, setProfile } = useAuth()
+  const logoutMutation = useMutation({
+    mutationFn: logoutAccount,
+    onSuccess: () => {
+      setIsAuthenticated(false)
+      setProfile(null)
+    }
+  })
+
+  const handleLogout = () => {
+    logoutMutation.mutate()
+  }
   return (
     <div className='bg-[linear-gradient(-180deg,#f53d2d,#f63)]'>
-      <div className='container flex items-center justify-between py-1.5 text-white '>
+      <div className='container flex items-center justify-between py-1.5 text-white'>
         <nav className='flex items-center text-sm font-light'>
           <div className='border-r-2 border-[hsla(0,0%,100%,.22)] pr-1.5'>
             <Link to={'#'} className='hover:brightness-90'>
               <span>Kênh người bán</span>
             </Link>
           </div>
-          <div className='border-r-2 border-[hsla(0,0%,100%,.22)] px-1.5'>
-            <Link to={'#'} className='hover:brightness-90'>
-              <span>Trở thành Người bán Shopee</span>
-            </Link>
-          </div>
+          {!isAuthenticated && (
+            <div className='border-r-2 border-[hsla(0,0%,100%,.22)] px-1.5'>
+              <Link to={'#'} className='hover:brightness-90'>
+                <span>Trở thành Người bán Shopee</span>
+              </Link>
+            </div>
+          )}
           <div className='border-r-2 border-[hsla(0,0%,100%,.22)] px-1.5'>
             <Link to={'#'} className='hover:brightness-90'>
               <span>Tải ứng dụng</span>
@@ -65,44 +83,48 @@ const Header = () => {
             </ul>
           </Popper>
           <div>
-            {/* <div className='px-1.5'>
-              <div className='flex items-center gap-1'>
-                <Link to={'#'} className='border-r border-[hsla(0,0%,100%,.22)] pr-2 hover:brightness-90'>
-                  <span>Đăng Ký</span>
-                </Link>
-                <Link to='#' className='pl-1.5 hover:brightness-90'>
-                  <span>Đăng Nhập</span>
-                </Link>
+            {!isAuthenticated && (
+              <div className='px-1.5'>
+                <div className='flex items-center gap-1'>
+                  <Link to={path.register} className='border-r border-[hsla(0,0%,100%,.22)] pr-2 hover:brightness-90'>
+                    <span>Đăng Ký</span>
+                  </Link>
+                  <Link to={path.login} className='pl-1.5 hover:brightness-90'>
+                    <span>Đăng Nhập</span>
+                  </Link>
+                </div>
               </div>
-            </div> */}
-            <Popper
-              iconLeft={<AvatarDefault className='stroke-[#c6c6c6]' />}
-              name={'zinbu99'}
-              className='h-5 w-5 rounded-full bg-[#f5f5f5] p-1'
-            >
-              <ul className='relative flex w-[9.375rem] flex-col items-center justify-start rounded-sm bg-white text-[#333] shadow-md'>
-                <li className='w-full cursor-pointer p-3 hover:bg-[#fafafa] hover:text-[#00bfa5]'>
-                  <Link to=''>
-                    <span className='capitalize'>Tài khoản của tôi</span>
-                  </Link>
-                </li>
-                <li className='w-full cursor-pointer p-3 hover:bg-[#fafafa] hover:text-[#00bfa5]'>
-                  <Link to=''>
-                    <span className='capitalize '>Đơn mua</span>
-                  </Link>
-                </li>
-                <li className='w-full cursor-pointer p-3 hover:bg-[#fafafa] hover:text-[#00bfa5]'>
-                  <Link to=''>
-                    <span className='capitalize'>Đăng xuất</span>
-                  </Link>
-                </li>
-              </ul>
-            </Popper>
+            )}
+            {isAuthenticated && (
+              <Popper
+                iconLeft={<AvatarDefault className='stroke-[#c6c6c6]' />}
+                name={profile?.email}
+                className='h-5 w-5 rounded-full bg-[#f5f5f5] p-1'
+              >
+                <ul className='relative flex w-[9.375rem] flex-col items-center justify-start rounded-sm bg-white text-[#333] shadow-md'>
+                  <li className='w-full cursor-pointer p-3 hover:bg-[#fafafa] hover:text-[#00bfa5]'>
+                    <Link to={path.profile}>
+                      <span className='capitalize'>Tài khoản của tôi</span>
+                    </Link>
+                  </li>
+                  <li className='w-full cursor-pointer p-3 hover:bg-[#fafafa] hover:text-[#00bfa5]'>
+                    <Link to=''>
+                      <span className='capitalize '>Đơn mua</span>
+                    </Link>
+                  </li>
+                  <li className='w-full cursor-pointer p-3 hover:bg-[#fafafa] hover:text-[#00bfa5]'>
+                    <button onClick={handleLogout}>
+                      <span className='capitalize'>Đăng xuất</span>
+                    </button>
+                  </li>
+                </ul>
+              </Popper>
+            )}
           </div>
         </nav>
       </div>
       <div className='container mt-2 py-1.5'>
-        <div className='grid grid-cols-11 gap-4'>
+        <div className='relative z-0 grid grid-cols-11 gap-4'>
           <Link to='/' className='col-span-2'>
             <Logo className='h-11 fill-white' />
           </Link>
@@ -126,7 +148,7 @@ const Header = () => {
               </>
             }
           >
-            <div className='w-[400px] rounded-sm bg-white shadow-md'>
+            <div className='w-[370px] rounded-sm bg-white shadow-md'>
               <div className=' w-full p-3 text-sm capitalize text-gray-300'>Sản phẩm mới thêm</div>
               <ul className='flex w-full flex-col items-center justify-start bg-white text-[#333]'>
                 <li className='w-full cursor-pointer px-3 py-3 hover:bg-[#fafafa]'>
