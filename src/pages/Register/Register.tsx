@@ -6,16 +6,19 @@ import { FcGoogle } from 'react-icons/fc'
 import { Schema, schema } from 'src/utils/rules'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Check, Eye, EyeSlash } from 'src/components/IconSvg'
-import InputForm from 'src/components/InputForm'
 import { useMutation } from '@tanstack/react-query'
 import { registerAccount } from 'src/apis/auth.api'
 import { omit } from 'lodash'
 import { isAxiosErrorUnprocessableEntity } from 'src/utils/utils'
-import { ResponeApi } from 'src/types/utils.type'
+import { ErrorRespone } from 'src/types/utils.type'
+import { useAuth } from 'src/contexts/auth.context'
+import Controls from 'src/components/controls/Controls'
 
 type FormData = Schema
 
 const Register = () => {
+  const { setIsAuthenticated, setProfile } = useAuth()
+
   const [viewPassword, setViewPassword] = useState<boolean>(false)
   const [viewConfirmPassword, setViewConfirmPassword] = useState<boolean>(false)
 
@@ -35,10 +38,11 @@ const Register = () => {
     const body = omit(data, ['confirm_password'])
     registerAccountMutation.mutate(body, {
       onSuccess: (data) => {
-        console.log(data)
+        setIsAuthenticated(true)
+        setProfile(data.data.data.user)
       },
       onError: (error) => {
-        if (isAxiosErrorUnprocessableEntity<ResponeApi<Omit<FormData, 'confirm_password'>>>(error)) {
+        if (isAxiosErrorUnprocessableEntity<ErrorRespone<Omit<FormData, 'confirm_password'>>>(error)) {
           const formError = error.response?.data.data
           if (formError) {
             Object.keys(formError).forEach((key) => {
@@ -73,7 +77,7 @@ const Register = () => {
             <form className='rounded bg-white p-6 shadow-sm lg:ml-10' onSubmit={onSubmit} noValidate>
               <div className='text-xl'>Đăng ký</div>
               <div className='mt-6'>
-                <InputForm
+                <Controls.InputForm
                   type='email'
                   placeholder='Email'
                   register={register}
@@ -84,10 +88,10 @@ const Register = () => {
                   <div className='bg-transparent px-4'>
                     {!errors?.email?.message && getValues('email') && <Check className='flex h-4 w-4 items-center' />}
                   </div>
-                </InputForm>
+                </Controls.InputForm>
               </div>
               <div className='mt-2'>
-                <InputForm
+                <Controls.InputForm
                   type={viewPassword ? 'text' : 'password'}
                   placeholder='Mật khẩu'
                   register={register}
@@ -104,10 +108,10 @@ const Register = () => {
                   >
                     {viewPassword ? <Eye className={'h-4 w-4'} /> : <EyeSlash className={'h-4 w-4'} />}
                   </button>
-                </InputForm>
+                </Controls.InputForm>
               </div>
               <div className='mt-2'>
-                <InputForm
+                <Controls.InputForm
                   type={viewConfirmPassword ? 'text' : 'password'}
                   placeholder='Nhập lại mật khẩu'
                   register={register}
@@ -124,18 +128,23 @@ const Register = () => {
                   >
                     {viewConfirmPassword ? <Eye className={'h-4 w-4'} /> : <EyeSlash className={'h-4 w-4'} />}
                   </button>
-                </InputForm>
+                </Controls.InputForm>
               </div>
               <div className='my-8'>
-                <button
+                <Controls.Button
                   className={`w-full rounded-sm py-2.5 text-sm uppercase text-white shadow-[0_1px_1px_rgba(0,0,0,.09)] hover:brightness-105 ${
-                    errors?.email?.message || errors?.password?.message || errors?.confirm_password?.message
+                    errors?.email?.message ||
+                    errors?.password?.message ||
+                    errors?.confirm_password?.message ||
+                    registerAccountMutation.isLoading
                       ? 'cursor-not-allowed bg-main-orange opacity-75'
                       : 'bg-main-orange'
                   }`}
+                  isLoading={registerAccountMutation.isLoading}
+                  disabled={registerAccountMutation.isLoading}
                 >
                   Đăng ký
-                </button>
+                </Controls.Button>
               </div>
               <div>
                 <div className='flex items-center pb-3'>
@@ -144,7 +153,7 @@ const Register = () => {
                   <div className='h-px w-full flex-1 bg-[#dbdbdb]'></div>
                 </div>
                 <div className='flex items-center'>
-                  <button
+                  <Controls.Button
                     className='m-1 flex h-[40px] w-full flex-1 items-center justify-center rounded-sm border border-gray-text hover:bg-slate-100'
                     onClick={(e) => {
                       e.preventDefault()
@@ -153,8 +162,9 @@ const Register = () => {
                   >
                     <FaFacebook className='text-color-blue mr-2 h-[20px] w-[20px] text-blue-600' />{' '}
                     <span className='text-sm'>Facebook</span>
-                  </button>
-                  <button
+                  </Controls.Button>
+
+                  <Controls.Button
                     className='m-1 flex h-[40px] w-full flex-1 items-center justify-center rounded-sm border border-gray-text hover:bg-slate-100'
                     onClick={(e) => {
                       e.preventDefault()
@@ -162,7 +172,7 @@ const Register = () => {
                     }}
                   >
                     <FcGoogle className='mr-2 h-[20px] w-[20px]' /> <span className='text-sm'>Google</span>
-                  </button>
+                  </Controls.Button>
                 </div>
                 <div className='mb-5 mt-4 text-center text-xs'>
                   <p>Bằng việc đăng kí, bạn đã đồng ý với Shopee về</p>

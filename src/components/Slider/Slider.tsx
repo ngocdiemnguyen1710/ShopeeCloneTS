@@ -62,7 +62,11 @@ const Slider = () => {
     setCurrentIndex(slideIndex)
   }
   return (
-    <div id='default-carousel' className='-z-1 group relative h-full w-full lg:col-span-2' data-carousel='slide'>
+    <div
+      id='default-carousel'
+      className='group relative relative z-0 h-full w-full lg:col-span-2'
+      data-carousel='slide'
+    >
       {/* Carousel wrapper */}
       <div className='relative h-full md:h-full'>
         {/* Item 1 */}

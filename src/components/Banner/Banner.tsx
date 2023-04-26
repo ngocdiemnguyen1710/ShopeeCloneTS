@@ -47,7 +47,7 @@ const imgPromo = [
 const Banner = () => {
   return (
     <div className='container pt-6'>
-      <div className='grid h-[235px] grid-cols-1 gap-1 bg-center lg:grid-cols-3'>
+      <div className='z-[-2] grid h-[235px] grid-cols-1 gap-1 bg-center lg:grid-cols-3'>
         <Slider />
         <div className='flex h-full flex-col justify-center overflow-hidden'>
           <Link to='' className='h-full flex-[1_1_50%] rounded-sm bg-contain' data-carousel-item>
