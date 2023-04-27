@@ -20,7 +20,6 @@ const AuthContext = createContext<AppContextInterface>(initialAuth)
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(initialAuth.isAuthenticated)
   const [profile, setProfile] = useState<User | null>(initialAuth.profile)
-  console.log(isAuthenticated)
   return (
     <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, profile, setProfile }}>
       {children}

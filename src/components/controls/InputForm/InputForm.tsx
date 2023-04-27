@@ -1,13 +1,9 @@
-import { HTMLInputTypeAttribute, ReactNode } from 'react'
+import { InputHTMLAttributes, ReactNode } from 'react'
 import { RegisterOptions, UseFormRegister } from 'react-hook-form'
 
-interface InputFormProps {
-  type: HTMLInputTypeAttribute
-  placeholder?: string
-  name: string
-  autoComplete: string
+interface InputFormProps extends InputHTMLAttributes<HTMLInputElement> {
   rules?: RegisterOptions
-  register: UseFormRegister<any>
+  register?: UseFormRegister<any>
   children?: ReactNode
   errorMessage?: string
 }
@@ -21,6 +17,7 @@ const InputForm = ({
   autoComplete,
   register
 }: InputFormProps) => {
+  const registerResult = register && name ? register(name, rules) : {}
   return (
     <>
       <div
@@ -35,7 +32,7 @@ const InputForm = ({
           autoComplete={autoComplete}
           className='w-full flex-1 rounded-sm bg-transparent p-2.5 text-sm outline-none'
           placeholder={placeholder}
-          {...register(name, rules)}
+          {...registerResult}
         />
         {children}
       </div>

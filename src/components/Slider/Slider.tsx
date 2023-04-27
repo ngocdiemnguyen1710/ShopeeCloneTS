@@ -1,20 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
 
-const slides = [
-  {
-    url: 'https://cf.shopee.vn/file/vn-50009109-fc69f7125d625e7d28661d4362db6bd2_xxhdpi'
-  },
-  {
-    url: 'https://cf.shopee.vn/file/vn-50009109-b28a2d179952004bcf8b184f7c725181_xxhdpi'
-  },
-  {
-    url: 'https://cf.shopee.vn/file/vn-50009109-e2355a278eec1229489fbf6140a5f993_xxhdpi'
-  }
-]
-
 let slideInterval: any
 
-const Slider = () => {
+interface SlideProp {
+  slides: {
+    url: string
+  }[]
+}
+
+const Slider = (props: SlideProp) => {
   const [currentIndex, setCurrentIndex] = useState(0)
 
   const slideRef = useRef<HTMLDivElement>(null)
@@ -44,14 +38,14 @@ const Slider = () => {
 
   const prevSlide = () => {
     const firstSlide = currentIndex === 0
-    const prevButton = firstSlide ? slides.length - 1 : currentIndex - 1
+    const prevButton = firstSlide ? props.slides.length - 1 : currentIndex - 1
     setCurrentIndex(prevButton)
     const slideAfter = slideRef.current as HTMLDivElement
     slideRef && slideAfter.classList.add('fade-anim')
   }
 
   const nextSlide = () => {
-    const lastSlide = currentIndex === slides.length - 1
+    const lastSlide = currentIndex === props.slides.length - 1
     const nextButton = lastSlide ? 0 : currentIndex + 1
     setCurrentIndex(nextButton)
     const slideAfter = slideRef.current as HTMLDivElement
@@ -62,17 +56,13 @@ const Slider = () => {
     setCurrentIndex(slideIndex)
   }
   return (
-    <div
-      id='default-carousel'
-      className='group relative relative z-0 h-full w-full lg:col-span-2'
-      data-carousel='slide'
-    >
+    <div id='default-carousel' className='group relative z-0 h-full w-full lg:col-span-2' data-carousel='slide'>
       {/* Carousel wrapper */}
       <div className='relative h-full md:h-full'>
         {/* Item 1 */}
         <div className='h-full rounded-sm duration-700 ease-in-out' data-carousel-item ref={slideRef}>
           <img
-            src={slides[currentIndex].url}
+            src={props.slides[currentIndex].url}
             className='absolute left-1/2 top-1/2 block h-full w-full -translate-x-1/2 -translate-y-1/2 rounded-sm'
             alt='...'
           />
@@ -80,7 +70,7 @@ const Slider = () => {
       </div>
       {/* Slider indicators */}
       <div className='absolute bottom-5 left-1/2 z-30 flex -translate-x-1/2 space-x-3'>
-        {slides.map((_, slideIndex) => {
+        {props.slides.map((_, slideIndex) => {
           return (
             <button
               key={slideIndex}
