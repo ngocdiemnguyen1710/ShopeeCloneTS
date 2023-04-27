@@ -23,7 +23,7 @@ const Header = () => {
   }
   return (
     <div className='bg-[linear-gradient(-180deg,#f53d2d,#f63)]'>
-      <div className='container flex items-center justify-between py-1.5 text-white'>
+      <div className='container relative z-20 flex items-center justify-between py-1.5 text-white '>
         <nav className='flex items-center text-sm font-light'>
           <div className='border-r-2 border-[hsla(0,0%,100%,.22)] pr-1.5'>
             <Link to={'#'} className='hover:brightness-90'>
@@ -124,7 +124,7 @@ const Header = () => {
         </nav>
       </div>
       <div className='container mt-2 py-1.5'>
-        <div className='relative z-0 grid grid-cols-11 gap-4'>
+        <div className='relative z-10 grid grid-cols-11 gap-4'>
           <Link to='/' className='col-span-2'>
             <Logo className='h-11 fill-white' />
           </Link>

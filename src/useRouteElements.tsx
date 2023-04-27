@@ -30,6 +30,10 @@ const useRouteElements = () => {
           element: <HomePage />
         },
         {
+          path: path.product,
+          element: <ProductList />
+        },
+        {
           path: path.profile,
           element: <ProtectedRoute />,
           children: [

@@ -44,11 +44,23 @@ const imgPromo = [
   }
 ]
 
+const slides = [
+  {
+    url: 'https://cf.shopee.vn/file/vn-50009109-fc69f7125d625e7d28661d4362db6bd2_xxhdpi'
+  },
+  {
+    url: 'https://cf.shopee.vn/file/vn-50009109-b28a2d179952004bcf8b184f7c725181_xxhdpi'
+  },
+  {
+    url: 'https://cf.shopee.vn/file/vn-50009109-e2355a278eec1229489fbf6140a5f993_xxhdpi'
+  }
+]
+
 const Banner = () => {
   return (
     <div className='container pt-6'>
       <div className='z-[-2] grid h-[235px] grid-cols-1 gap-1 bg-center lg:grid-cols-3'>
-        <Slider />
+        <Slider slides={slides} />
         <div className='flex h-full flex-col justify-center overflow-hidden'>
           <Link to='' className='h-full flex-[1_1_50%] rounded-sm bg-contain' data-carousel-item>
             <img

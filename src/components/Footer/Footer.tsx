@@ -228,134 +228,137 @@ const followUs = [
 
 const Footer = () => {
   return (
-    <footer className='bg-footer'>
-      <div className='container'>
-        <div className='grid grid-cols-2 lg:grid-cols-5'>
-          <div className='p-1.5'>
-            <div className='mb-5 mt-10 text-xs font-bold'>CHĂM SÓC KHÁCH HÀNG</div>
-            <ul className='mb-4 block list-none text-color-footer-1 no-underline'>
-              {menuCareCustomer?.map((item) => {
-                return (
-                  <li className='mb-3 text-xs' key={item.id}>
-                    <Link to='#' className='overflow-hidden text-color-footer-1 no-underline hover:text-main-orange'>
-                      <span className='max-w-full truncate'>{item.name}</span>
-                    </Link>
-                  </li>
-                )
-              })}
-            </ul>
-          </div>
-          <div className='p-1.5'>
-            <div className='mb-5 mt-10 text-xs font-bold'>VỀ SHOPEE</div>
-            <ul className='mb-4 block list-none text-color-footer-1 no-underline'>
-              {aboutShop?.map((item) => {
-                return (
-                  <li className='mb-3 text-xs' key={item.id}>
-                    <Link to='#' className='overflow-hidden text-color-footer-1 no-underline hover:text-main-orange'>
-                      <span className='max-w-full truncate'>{item.name}</span>
-                    </Link>
-                  </li>
-                )
-              })}
-            </ul>
-          </div>
-          <div className='p-1.5'>
-            <div className='mb-5 mt-10 text-xs font-bold'>THANH TOÁN</div>
-            <ul className='mb-4 flex list-none flex-wrap text-color-footer-1 no-underline'>
-              {creditCard?.map((item) => {
-                return (
-                  <li
-                    className='mb-2 mr-2 box-border flex h-7 w-14 items-center justify-center overflow-hidden rounded-sm bg-white p-1 shadow-img-footer'
-                    key={item.id}
-                  >
-                    <Link to='#' className='box-border max-h-full max-w-full text-center'>
-                      <img src={item.src} alt={item.alt} className='max-h-full max-w-full' />
-                    </Link>
-                  </li>
-                )
-              })}
-            </ul>
-            <div className='mb-5 mt-10 text-xs font-bold'>ĐƠN VỊ VẬN CHUYỂN</div>
-            <ul className='mb-4 flex list-none flex-wrap text-color-footer-1 no-underline'>
-              {delivery?.map((item) => {
-                return (
-                  <li
-                    className='mb-2 mr-2 box-border flex h-7 w-14 items-center justify-center overflow-hidden rounded-sm bg-white p-1 shadow-img-footer'
-                    key={item.id}
-                  >
-                    <Link to='#' className='box-border max-h-full max-w-full text-center'>
-                      <img src={item.src} alt={item.alt} className='max-h-full max-w-full' />
-                    </Link>
-                  </li>
-                )
-              })}
-            </ul>
-          </div>
-          <div className='p-1.5'>
-            <div className='mb-5 mt-10 text-xs font-bold'>THEO DÕI CHÚNG TÔI TRÊN</div>
-            <ul className='mb-4 block list-none text-color-footer-1 no-underline'>
-              {followUs?.map((item) => {
-                return (
-                  <li className='mb-3 text-xs' key={item.id}>
-                    <Link
-                      to='#'
-                      className='flex items-center overflow-hidden text-color-footer-1 no-underline hover:text-main-orange'
+    <footer className=''>
+      <div className='w-full bg-[#fbfbfb]'>
+        <div className='container w-full '>
+          <div className='grid grid-cols-2 lg:grid-cols-5'>
+            <div className='p-1.5'>
+              <div className='mb-5 mt-10 text-xs font-bold'>CHĂM SÓC KHÁCH HÀNG</div>
+              <ul className='mb-4 block list-none text-color-footer-1 no-underline'>
+                {menuCareCustomer?.map((item) => {
+                  return (
+                    <li className='mb-3 text-xs' key={item.id}>
+                      <Link to='#' className='overflow-hidden text-color-footer-1 no-underline hover:text-main-orange'>
+                        <span className='max-w-full truncate'>{item.name}</span>
+                      </Link>
+                    </li>
+                  )
+                })}
+              </ul>
+            </div>
+            <div className='p-1.5'>
+              <div className='mb-5 mt-10 text-xs font-bold'>VỀ SHOPEE</div>
+              <ul className='mb-4 block list-none text-color-footer-1 no-underline'>
+                {aboutShop?.map((item) => {
+                  return (
+                    <li className='mb-3 text-xs' key={item.id}>
+                      <Link to='#' className='overflow-hidden text-color-footer-1 no-underline hover:text-main-orange'>
+                        <span className='max-w-full truncate'>{item.name}</span>
+                      </Link>
+                    </li>
+                  )
+                })}
+              </ul>
+            </div>
+            <div className='p-1.5'>
+              <div className='mb-5 mt-10 text-xs font-bold'>THANH TOÁN</div>
+              <ul className='mb-4 flex list-none flex-wrap text-color-footer-1 no-underline'>
+                {creditCard?.map((item) => {
+                  return (
+                    <li
+                      className='mb-2 mr-2 box-border flex h-7 w-14 items-center justify-center overflow-hidden rounded-sm bg-white p-1 shadow-img-footer'
+                      key={item.id}
                     >
-                      <img src={item.src} alt={item.name} className='mr-2' />
-                      <span className='max-w-full truncate'>{item.name}</span>
-                    </Link>
-                  </li>
-                )
-              })}
-            </ul>
+                      <Link to='#' className='box-border max-h-full max-w-full text-center'>
+                        <img src={item.src} alt={item.alt} className='max-h-full max-w-full' />
+                      </Link>
+                    </li>
+                  )
+                })}
+              </ul>
+              <div className='mb-5 mt-10 text-xs font-bold'>ĐƠN VỊ VẬN CHUYỂN</div>
+              <ul className='mb-4 flex list-none flex-wrap text-color-footer-1 no-underline'>
+                {delivery?.map((item) => {
+                  return (
+                    <li
+                      className='mb-2 mr-2 box-border flex h-7 w-14 items-center justify-center overflow-hidden rounded-sm bg-white p-1 shadow-img-footer'
+                      key={item.id}
+                    >
+                      <Link to='#' className='box-border max-h-full max-w-full text-center'>
+                        <img src={item.src} alt={item.alt} className='max-h-full max-w-full' />
+                      </Link>
+                    </li>
+                  )
+                })}
+              </ul>
+            </div>
+            <div className='p-1.5'>
+              <div className='mb-5 mt-10 text-xs font-bold'>THEO DÕI CHÚNG TÔI TRÊN</div>
+              <ul className='mb-4 block list-none text-color-footer-1 no-underline'>
+                {followUs?.map((item) => {
+                  return (
+                    <li className='mb-3 text-xs' key={item.id}>
+                      <Link
+                        to='#'
+                        className='flex items-center overflow-hidden text-color-footer-1 no-underline hover:text-main-orange'
+                      >
+                        <img src={item.src} alt={item.name} className='mr-2' />
+                        <span className='max-w-full truncate'>{item.name}</span>
+                      </Link>
+                    </li>
+                  )
+                })}
+              </ul>
+            </div>
+            <div className='p-1.5'>
+              <div className='mb-5 mt-10 text-xs font-bold'>TẢI ỨNG DỤNG SHOPEE NGAY THÔI</div>
+              <div className='flex items-center'>
+                <Link to='#' className='no-underline'>
+                  <img
+                    src={QRCode}
+                    alt='QR'
+                    className='mr-3 max-h-full max-w-full rounded-sm bg-white p-2 shadow-img-footer'
+                  />
+                </Link>
+                <div className='flex w-20 flex-col'>
+                  <Link
+                    to='#'
+                    className='mb-2 flex items-center overflow-hidden rounded-sm bg-white p-1 no-underline shadow-img-footer'
+                  >
+                    <img src={App1} alt='Appstore' className='max-h-full max-w-full' />
+                  </Link>
+                  <Link
+                    to='#'
+                    className='mb-2 flex items-center overflow-hidden rounded-sm bg-white p-1 no-underline shadow-img-footer'
+                  >
+                    <img src={App2} alt='GGPlay' className='max-h-full max-w-full' />
+                  </Link>
+                  <Link
+                    to='#'
+                    className='mb-2 flex items-center overflow-hidden rounded-sm bg-white p-1 no-underline shadow-img-footer'
+                  >
+                    <img src={App3} alt='AppGallery' className='max-h-full max-w-full' />
+                  </Link>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className='p-1.5'>
-            <div className='mb-5 mt-10 text-xs font-bold'>TẢI ỨNG DỤNG SHOPEE NGAY THÔI</div>
-            <div className='flex items-center'>
-              <Link to='#' className='no-underline'>
-                <img
-                  src={QRCode}
-                  alt='QR'
-                  className='mr-3 max-h-full max-w-full rounded-sm bg-white p-2 shadow-img-footer'
-                />
-              </Link>
-              <div className='flex w-20 flex-col'>
-                <Link
-                  to='#'
-                  className='mb-2 flex items-center overflow-hidden rounded-sm bg-white p-1 no-underline shadow-img-footer'
-                >
-                  <img src={App1} alt='Appstore' className='max-h-full max-w-full' />
-                </Link>
-                <Link
-                  to='#'
-                  className='mb-2 flex items-center overflow-hidden rounded-sm bg-white p-1 no-underline shadow-img-footer'
-                >
-                  <img src={App2} alt='GGPlay' className='max-h-full max-w-full' />
-                </Link>
-                <Link
-                  to='#'
-                  className='mb-2 flex items-center overflow-hidden rounded-sm bg-white p-1 no-underline shadow-img-footer'
-                >
-                  <img src={App3} alt='AppGallery' className='max-h-full max-w-full' />
-                </Link>
+          <hr />
+          <div className='grid grid-cols-1 gap-4 py-10 text-color-footer-2 lg:grid-cols-3'>
+            <div className='text-sm lg:col-span-1'>© 2023 Shopee. Tất cả các quyền được bảo lưu.</div>
+            <div className='lg:col-span-2'>
+              <div className='text-sm'>
+                Quốc gia & Khu vực: <Link to={'#'}>Singapore</Link> | <Link to={'#'}>Indonesia</Link> |{' '}
+                <Link to={'#'}>Đài Loan</Link> | <Link to={'#'}>Thái Lan</Link> | <Link to={'#'}>Malaysia</Link> |{' '}
+                <Link to={'#'}>Việt Nam</Link> | <Link to={'#'}>Philippínes</Link> | <Link to={'#'}>Brazil</Link> |{' '}
+                <Link to={'#'}>Mexico</Link> | <Link to={'#'}>Colombia</Link> | <Link to={'#'}>Chile</Link>
               </div>
             </div>
           </div>
         </div>
-        <hr />
-        <div className='grid grid-cols-1 gap-4 py-10 text-color-footer-2 lg:grid-cols-3'>
-          <div className='text-sm lg:col-span-1'>© 2023 Shopee. Tất cả các quyền được bảo lưu.</div>
-          <div className='lg:col-span-2'>
-            <div className='text-sm'>
-              Quốc gia & Khu vực: <Link to={'#'}>Singapore</Link> | <Link to={'#'}>Indonesia</Link> |{' '}
-              <Link to={'#'}>Đài Loan</Link> | <Link to={'#'}>Thái Lan</Link> | <Link to={'#'}>Malaysia</Link> |{' '}
-              <Link to={'#'}>Việt Nam</Link> | <Link to={'#'}>Philippínes</Link> | <Link to={'#'}>Brazil</Link> |{' '}
-              <Link to={'#'}>Mexico</Link> | <Link to={'#'}>Colombia</Link> | <Link to={'#'}>Chile</Link>
-            </div>
-          </div>
-        </div>
       </div>
-      <div>
+
+      <div className='bg-contain-gray'>
         <div className='mx-auto max-w-7xl px-4 py-10 text-xs text-color-footer-2'>
           <div className='mb-10 flex justify-center'>
             <div className='border-r border-gray-200 px-6'>

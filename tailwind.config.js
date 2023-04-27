@@ -11,13 +11,15 @@ module.exports = {
     extend: {
       colors: {
         'main-orange': '#ee4d2d',
+        'main-black': '#333',
         'color-footer-1': 'rgba(0,0,0,.65)',
         'color-footer-2': 'rgba(0,0,0,.54)',
         footer: '#f5f5f5',
         'gray-1': '#ccc',
         'gray-text': 'rgba(0,0,0,.26)',
         'error-input': '#fff6f7',
-        'error-box': '#ff424f'
+        'error-box': '#ff424f',
+        'contain-gray': '#f5f5f5'
       },
       boxShadow: {
         'img-footer': '0 1px 1px rgba(0,0,0,.2)'
