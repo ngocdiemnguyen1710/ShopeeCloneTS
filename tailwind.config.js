@@ -11,7 +11,7 @@ module.exports = {
     extend: {
       colors: {
         'main-orange': '#ee4d2d',
-        'main-black': '#333',
+        'main-black': '#555',
         'color-footer-1': 'rgba(0,0,0,.65)',
         'color-footer-2': 'rgba(0,0,0,.54)',
         footer: '#f5f5f5',
