@@ -1,6 +1,7 @@
 import Slider from 'src/components/Slider'
-import Aside from './Aside'
-import Sort from './Sort'
+import Aside from './components/Aside'
+import Sort from './components/Sort'
+import ProductItem from './components/ProductItem'
 
 const slides = [
   {
@@ -18,16 +19,22 @@ const ProductList = () => {
   return (
     <div className='min-w-[100vh] bg-contain-gray p-3 text-main-black'>
       <div className='container'>
-        <div className='h-[350px]'>
+        <div className='mt-4 h-[350px]'>
           <Slider slides={slides} />
         </div>
-        <div className='grid grid-cols-[190px_minmax(900px,_1fr)] gap-3'>
+        <div className='mt-8 grid grid-cols-[190px_minmax(900px,_1fr)] gap-3'>
           <div className='col-span-1'>
             <Aside />
           </div>
-          <div className='block'>
+          <div className='ml-2 block'>
             <Sort />
-            <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5'></div>
+            <div className='mt-2 grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-5'>
+              {Array(6)
+                .fill(0)
+                .map((item) => {
+                  return <ProductItem key={item} />
+                })}
+            </div>
           </div>
         </div>
       </div>
