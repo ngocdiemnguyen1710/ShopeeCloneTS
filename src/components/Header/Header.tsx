@@ -4,14 +4,14 @@ import { RiInstagramFill } from 'react-icons/ri'
 import { ArrowDown, AvatarDefault, Bell, Cart, Language, Logo, SearchIcon, Support } from '../IconSvg'
 import Popper from '../Popper'
 import { useMutation } from '@tanstack/react-query'
-import { logoutAccount } from 'src/apis/auth.api'
+import authApi from 'src/apis/auth.api'
 import { useAuth } from 'src/contexts/auth.context'
 import { path } from 'src/constants/path'
 
 const Header = () => {
   const { isAuthenticated, setIsAuthenticated, profile, setProfile } = useAuth()
   const logoutMutation = useMutation({
-    mutationFn: logoutAccount,
+    mutationFn: authApi.logoutAccount,
     onSuccess: () => {
       setIsAuthenticated(false)
       setProfile(null)

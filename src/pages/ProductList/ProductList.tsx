@@ -2,6 +2,11 @@ import Slider from 'src/components/Slider'
 import Aside from './components/Aside'
 import Sort from './components/Sort'
 import ProductItem from './components/ProductItem'
+import { useQuery } from '@tanstack/react-query'
+import { useQueryParams } from 'src/hooks/useQueryParams'
+import productApi from 'src/apis/product.api'
+import Pagination from './components/Pagination'
+import { useState } from 'react'
 
 const slides = [
   {
@@ -16,6 +21,14 @@ const slides = [
 ]
 
 const ProductList = () => {
+  const [page, setPage] = useState(1)
+  const queryConfig = useQueryParams()
+  const { data } = useQuery({
+    queryKey: ['products', queryConfig],
+    queryFn: () => {
+      return productApi.getProducts(queryConfig)
+    }
+  })
   return (
     <div className='min-w-[100vh] bg-contain-gray p-3 text-main-black'>
       <div className='container'>
@@ -29,12 +42,16 @@ const ProductList = () => {
           <div className='ml-2 block'>
             <Sort />
             <div className='mt-2 grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-5'>
-              {Array(6)
-                .fill(0)
-                .map((item) => {
-                  return <ProductItem key={item} />
+              {data &&
+                data?.data?.data.products?.map((product) => {
+                  return (
+                    <div key={product._id} className='col-span-1'>
+                      <ProductItem product={product} />
+                    </div>
+                  )
                 })}
             </div>
+            <Pagination page={page} setPage={setPage} pageSize={20} />
           </div>
         </div>
       </div>
