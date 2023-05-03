@@ -16,12 +16,15 @@ const Sort = () => {
           <Controls.Button className='shadow-[0 1px 1px 0 rgba(0,0,0,.02)] rounded-sm bg-white px-3 py-1.5 capitalize hover:bg-slate-50'>
             Bán chạy
           </Controls.Button>
-          <select className='shadow-[0 1px 1px 0 rgba(0,0,0,.02)] h-[2.22rem] rounded-sm px-2 outline-none hover:bg-slate-50'>
+          <select
+            className='shadow-[0 1px 1px 0 rgba(0,0,0,.02)] h-[2.22rem] rounded-sm px-2 outline-none hover:bg-slate-50'
+            defaultValue={''}
+          >
             <option value='' disabled>
               Giá
             </option>
             <option value='price:asc'>Giá: Thấp đến Cao</option>
-            <option value='price:des'>Giá: Cao đến Thấp</option>
+            <option value='price:desc'>Giá: Cao đến Thấp</option>
           </select>
         </div>
         <div className='flex items-center gap-2'>

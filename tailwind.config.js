@@ -19,7 +19,8 @@ module.exports = {
         'gray-text': 'rgba(0,0,0,.26)',
         'error-input': '#fff6f7',
         'error-box': '#ff424f',
-        'contain-gray': '#f5f5f5'
+        'contain-gray': '#f5f5f5',
+        pagination: 'rgba(0,0,0,.4)'
       },
       boxShadow: {
         'img-footer': '0 1px 1px rgba(0,0,0,.2)'

@@ -5,11 +5,10 @@ import { useForm } from 'react-hook-form'
 import { FaFacebook } from 'react-icons/fa'
 import { FcGoogle } from 'react-icons/fc'
 import { Link } from 'react-router-dom'
-import { loginAccount } from 'src/apis/auth.api'
+import authApi from 'src/apis/auth.api'
 import { Check, Eye, EyeSlash } from 'src/components/IconSvg'
 import Controls from 'src/components/controls/Controls'
 import { useAuth } from 'src/contexts/auth.context'
-import { User } from 'src/types/users.type'
 import { ErrorRespone } from 'src/types/utils.type'
 import { Schema, schema } from 'src/utils/rules'
 import { isAxiosErrorUnprocessableEntity } from 'src/utils/utils'
@@ -30,7 +29,7 @@ const Login = () => {
   })
 
   const loginAccountMutation = useMutation({
-    mutationFn: (body: FormData) => loginAccount(body)
+    mutationFn: (body: FormData) => authApi.loginAccount(body)
   })
   const onSubmit = handleSubmit((data) => {
     loginAccountMutation.mutate(data, {
