@@ -1,14 +1,17 @@
 import classNames from 'classnames'
 import { ArrowLeftPagination, ArrowRightPagination } from 'src/components/IconSvg'
+import { QueryConfig } from '../../ProductList'
+import { Link, createSearchParams } from 'react-router-dom'
+import { path } from 'src/constants/path'
 
 interface Props {
-  page: number
-  setPage: React.Dispatch<React.SetStateAction<number>>
+  queryConfig: QueryConfig
   pageSize: number
 }
 
 const RANGE = 2
-const Pagination = ({ page, setPage, pageSize }: Props) => {
+const Pagination = ({ queryConfig, pageSize }: Props) => {
+  const page = Number(queryConfig.page)
   const renderPagination = () => {
     let dotAfter = false
     let dotBefore = false
@@ -16,9 +19,9 @@ const Pagination = ({ page, setPage, pageSize }: Props) => {
       if (!dotBefore) {
         dotBefore = true
         return (
-          <button className='m-4 h-7 min-w-[2.5rem] text-xl text-pagination' key={index}>
+          <span className='m-4 h-7 min-w-[2.5rem] text-xl text-pagination' key={index}>
             ...
-          </button>
+          </span>
         )
       }
       return null
@@ -27,9 +30,9 @@ const Pagination = ({ page, setPage, pageSize }: Props) => {
       if (!dotAfter) {
         dotAfter = true
         return (
-          <button className='m-4 h-7 min-w-[2.5rem] text-xl text-pagination' key={index}>
+          <span className='m-4 h-7 min-w-[2.5rem] text-xl text-pagination' key={index}>
             ...
-          </button>
+          </span>
         )
       }
       return null
@@ -50,28 +53,65 @@ const Pagination = ({ page, setPage, pageSize }: Props) => {
           return renderDotBefore(index)
         }
         return (
-          <button
-            className={classNames('m-4 h-7 min-w-[2.5rem] text-xl ', {
-              'rounded-sm bg-main-orange text-white': pageNumber === page,
+          <Link
+            to={{
+              pathname: path.product,
+              search: createSearchParams({
+                ...queryConfig,
+                page: pageNumber.toString()
+              }).toString()
+            }}
+            className={classNames('m-4 flex h-7 min-w-[2.5rem] justify-center text-xl', {
+              'rounded-sm bg-main-orange text-white shadow-sm': pageNumber === page,
               'border-transparent text-pagination': pageNumber !== page
             })}
             key={index}
-            onClick={() => setPage(pageNumber)}
           >
             {pageNumber}
-          </button>
+          </Link>
         )
       })
   }
   return (
     <div className='my-7 flex flex-wrap items-center justify-center'>
-      <button className='mr-4 fill-pagination'>
-        <ArrowLeftPagination className='h-3.5 w-3.5' />
-      </button>
+      {page === 1 ? (
+        <span className='mr-4 flex justify-center fill-pagination'>
+          <ArrowLeftPagination className='h-3.5 w-3.5' />
+        </span>
+      ) : (
+        <Link
+          to={{
+            pathname: path.product,
+            search: createSearchParams({
+              ...queryConfig,
+              page: (page - 1).toString()
+            }).toString()
+          }}
+          className='mr-4 flex justify-center fill-pagination'
+        >
+          <ArrowLeftPagination className='h-3.5 w-3.5' />
+        </Link>
+      )}
+
       {renderPagination()}
-      <button className='ml-4 fill-pagination'>
-        <ArrowRightPagination className='h-3.5 w-3.5' />
-      </button>
+      {page === pageSize ? (
+        <span className='ml-4 flex justify-center fill-pagination'>
+          <ArrowRightPagination className='h-3.5 w-3.5' />
+        </span>
+      ) : (
+        <Link
+          to={{
+            pathname: path.product,
+            search: createSearchParams({
+              ...queryConfig,
+              page: (page + 1).toString()
+            }).toString()
+          }}
+          className='ml-4 flex justify-center fill-pagination'
+        >
+          <ArrowRightPagination className='h-3.5 w-3.5' />
+        </Link>
+      )}
     </div>
   )
 }
