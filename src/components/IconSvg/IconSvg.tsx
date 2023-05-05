@@ -296,7 +296,7 @@ export const ThinArrowRight = ({ className }: IconProps) => {
   )
 }
 
-export const Filter = ({ className }: IconProps) => {
+export const FilterIcon = ({ className }: IconProps) => {
   return (
     <svg enableBackground='new 0 0 15 15' viewBox='0 0 15 15' x={0} y={0} className={className}>
       <g>

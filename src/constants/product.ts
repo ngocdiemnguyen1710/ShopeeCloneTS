@@ -5,7 +5,7 @@ export const sortBy = {
   price: 'price'
 } as const
 
-export const order = {
+export const orderConstant = {
   asc: 'asc',
   desc: 'desc'
 } as const

@@ -1,8 +1,9 @@
 import Button from '../Button'
 import InputForm from '../InputForm'
-import InputRegular from '../InputRegular'
+import InputNumber from '../InputNumber'
+
 export const Controls = {
   Button,
   InputForm,
-  InputRegular
+  InputNumber
 }

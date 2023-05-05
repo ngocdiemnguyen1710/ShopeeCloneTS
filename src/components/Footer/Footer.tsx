@@ -378,7 +378,7 @@ const Footer = () => {
             </div>
             <div className='border-gray-200 px-6'>
               <Link to={'#'}>
-                <span>CHÍNH SÁCH VẬN CHUYỂN</span>
+                <span>CHÍNH SÁCH TRẢ HÀNG VÀ HOÀN TIỀN</span>
               </Link>
             </div>
           </div>

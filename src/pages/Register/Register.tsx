@@ -14,13 +14,15 @@ import { ErrorRespone } from 'src/types/utils.type'
 import { useAuth } from 'src/contexts/auth.context'
 import Controls from 'src/components/controls/Controls'
 
-type FormData = Schema
+type FormData = Pick<Schema, 'email' | 'password' | 'confirm_password'>
 
 const Register = () => {
   const { setIsAuthenticated, setProfile } = useAuth()
 
   const [viewPassword, setViewPassword] = useState<boolean>(false)
   const [viewConfirmPassword, setViewConfirmPassword] = useState<boolean>(false)
+
+  const registerSchema = schema.pick(['email', 'password', 'confirm_password'])
 
   const {
     register,
@@ -29,7 +31,7 @@ const Register = () => {
     setError,
     formState: { errors }
   } = useForm<FormData>({
-    resolver: yupResolver(schema)
+    resolver: yupResolver(registerSchema)
   })
   const registerAccountMutation = useMutation({
     mutationFn: (body: Omit<FormData, 'confirm_password'>) => authApi.registerAccount(body)
