@@ -13,11 +13,12 @@ import { ErrorRespone } from 'src/types/utils.type'
 import { Schema, schema } from 'src/utils/rules'
 import { isAxiosErrorUnprocessableEntity } from 'src/utils/utils'
 
-type FormData = Omit<Schema, 'confirm_password'>
+type FormData = Pick<Schema, 'email' | 'password'>
+
 const Login = () => {
   const { setIsAuthenticated, setProfile } = useAuth()
   const [viewPassword, setViewPassword] = useState<boolean>(false)
-  const loginSchema = schema.omit(['confirm_password'])
+  const loginSchema = schema.pick(['email', 'password'])
   const {
     register,
     handleSubmit,

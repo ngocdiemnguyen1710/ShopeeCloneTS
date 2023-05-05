@@ -1,81 +1,172 @@
-import { Link, NavLink } from 'react-router-dom'
-import { ArrowRight, Filter, List, StartFull } from 'src/components/IconSvg'
+import { Link, NavLink, createSearchParams, useNavigate } from 'react-router-dom'
+import { ArrowRight, FilterIcon, List } from 'src/components/IconSvg'
 import Controls from 'src/components/controls/Controls'
+import { Category } from 'src/types/category.type'
+import { QueryConfig } from '../../ProductList'
+import classNames from 'classnames'
+import { path } from 'src/constants/path'
+import { Controller, useForm } from 'react-hook-form'
+import { Schema, schema } from 'src/utils/rules'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { NoUndefinedField } from 'src/types/utils.type'
+import RatingStar from '../RatingStar'
+import { omit } from 'lodash'
 
-const Aside = () => {
+interface Props {
+  categories: Category[]
+  queryConfig: QueryConfig
+}
+
+type FormData = NoUndefinedField<Pick<Schema, 'price_max' | 'price_min'>>
+
+const priceSchema = schema.pick(['price_min', 'price_max'])
+const Aside = ({ categories, queryConfig }: Props) => {
+  const { category } = queryConfig
+  const navigate = useNavigate()
+  const {
+    handleSubmit,
+    control,
+    trigger,
+    formState: { errors }
+  } = useForm<FormData>({
+    defaultValues: {
+      price_min: '',
+      price_max: ''
+    },
+    resolver: yupResolver(priceSchema),
+    shouldFocusError: false
+  })
+
+  const onSubmit = handleSubmit((data) => {
+    navigate({
+      pathname: path.product,
+      search: createSearchParams({
+        ...queryConfig,
+        price_min: data.price_min,
+        price_max: data.price_max
+      }).toString()
+    })
+  })
+
+  const handleRemoveAll = () => {
+    navigate({
+      pathname: path.product,
+      search: createSearchParams(omit(queryConfig, ['price_min', 'price_max', 'rating_filter', 'category'])).toString()
+    })
+  }
   return (
     <>
       <div className='mb-10 w-full'>
         <Link to='' className='flex items-center'>
-          <List className='mr-3 h-3 w-3' />
-          <span className='text-base font-bold capitalize leading-[3rem]'>Tất cả danh mục</span>
+          <List
+            className={classNames('mr-3 h-3 w-3', {
+              'fill-main-orange': !category
+            })}
+          />
+          <span
+            className={classNames('text-base font-bold capitalize leading-[3rem]', {
+              'text-main-orange': !category
+            })}
+          >
+            Tất cả danh mục
+          </span>
         </Link>
         <div className='h-px bg-gray-300'></div>
         <ul className='my-4'>
-          <li className='mb-4'>
-            <NavLink to='' className='flex items-center'>
-              <ArrowRight className={'mr-1 h-2 w-2'} />
-              <span className='flex-1'>Thời trang</span>
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to=''>
-              <span>Điện thoại</span>
-            </NavLink>
-          </li>
+          {categories.map((categoryItem) => {
+            const isActive = category === categoryItem._id
+            return (
+              <li className='mb-4' key={categoryItem._id}>
+                <NavLink
+                  to={{
+                    pathname: path.product,
+                    search: createSearchParams({
+                      ...queryConfig,
+                      category: categoryItem._id,
+                      page: '1'
+                    }).toString()
+                  }}
+                  className='flex items-center'
+                >
+                  {isActive ? <ArrowRight className={'h-2 w-2 fill-main-orange'} /> : <div className='w-2'></div>}
+                  <span
+                    className={classNames('ml-2', {
+                      'font-bold text-main-orange': isActive
+                    })}
+                  >
+                    {categoryItem.name}
+                  </span>
+                </NavLink>
+              </li>
+            )
+          })}
         </ul>
       </div>
       <div className='w-full'>
         <div className='flex items-center'>
-          <Filter className={'mr-3 h-3 w-3 stroke-current'} />
+          <FilterIcon className={'mr-3 h-3 w-3 stroke-current'} />
           <span className='font-bold uppercase'>Bộ lọc tìm kiếm</span>
         </div>
-        <div className='my-5 w-full'>
+        <form className='my-5 w-full' onSubmit={onSubmit}>
           <div className='mb-4 capitalize'>Khoảng giá</div>
           <div className='grid grid-cols-[70px_minmax(10px,_1fr)_70px] items-center gap-2'>
-            <Controls.InputRegular className='bg-white' placeholder='đ TỪ' />
+            <Controller
+              control={control}
+              name='price_min'
+              render={({ field }) => {
+                return (
+                  <Controls.InputNumber
+                    type='text'
+                    className='bg-white'
+                    placeholder='₫ TỪ'
+                    classNameError='hidden'
+                    onChange={(e) => {
+                      field.onChange(e)
+                      trigger('price_max')
+                    }}
+                    value={field.value}
+                    ref={field.ref}
+                  />
+                )
+              }}
+            />
             <span className='mx-2.5 h-[1px] bg-gray-300'></span>
-            <Controls.InputRegular className='bg-white' placeholder='đ ĐẾN' />
+            <Controller
+              control={control}
+              name='price_max'
+              render={({ field }) => {
+                return (
+                  <Controls.InputNumber
+                    type='text'
+                    className='bg-white'
+                    classNameError='hidden'
+                    placeholder='₫ ĐẾN'
+                    onChange={(e) => {
+                      field.onChange(e)
+                      trigger('price_min')
+                    }}
+                    value={field.value}
+                    ref={field.ref}
+                  />
+                )
+              }}
+            />
           </div>
+          {errors.price_min?.message && <div className='mt-1 text-xs text-red-600'>{errors.price_min?.message}</div>}
           <Controls.Button className='mt-5 w-full rounded-sm bg-main-orange py-2 text-sm uppercase text-white'>
             Áp dụng
           </Controls.Button>
-        </div>
+        </form>
         <div className='h-px bg-gray-300'></div>
         <div className='my-5 w-full'>
           <div className='mb-4 capitalize'>Đánh giá</div>
-          <ul className='pl-3'>
-            <li className='mb-4'>
-              <Link to='' className='flex items-center gap-1'>
-                {Array(5)
-                  .fill(0)
-                  .map((_, index) => {
-                    return (
-                      <div key={index}>
-                        <StartFull className={'h-4 w-4'} />
-                      </div>
-                    )
-                  })}
-              </Link>
-            </li>
-            <li className='mb-4'>
-              <Link to='' className='flex items-center gap-1'>
-                {Array(5)
-                  .fill(0)
-                  .map((_, index) => {
-                    return (
-                      <div key={index}>
-                        <StartFull className={'h-4 w-4'} />
-                      </div>
-                    )
-                  })}
-                <span className='text-sm'>trở lên</span>
-              </Link>
-            </li>
-          </ul>
+          <RatingStar queryConfig={queryConfig} />
         </div>
         <div className='h-px bg-gray-300'></div>
-        <Controls.Button className='mt-5 w-full rounded-sm bg-main-orange py-2 text-sm uppercase text-white'>
+        <Controls.Button
+          onClick={handleRemoveAll}
+          className='mt-5 w-full rounded-sm bg-main-orange py-2 text-sm uppercase text-white'
+        >
           Xóa tất cả
         </Controls.Button>
       </div>
