@@ -1,6 +1,14 @@
 import { StartBackground, StartFull } from 'src/components/IconSvg'
 
-const ProductRating = ({ rating }: { rating: number }) => {
+const ProductRating = ({
+  rating,
+  activeClassRating = 'h-2.5 w-2.5 fill-[url(#ratingStarGradient)] stroke-[#ffa727]',
+  noActiveClassRating = 'h-2.5 w-2.5 fill-current text-gray-1'
+}: {
+  rating: number
+  activeClassRating?: string
+  noActiveClassRating?: string
+}) => {
   const handleWidth = (order: number) => {
     if (order <= rating) {
       return '100%'
@@ -20,9 +28,9 @@ const ProductRating = ({ rating }: { rating: number }) => {
                 className='absolute left-0 top-0 z-10 h-full overflow-hidden'
                 style={{ width: handleWidth(index + 1) }}
               >
-                <StartFull className='h-2.5 w-2.5' />
+                <StartFull className={activeClassRating} />
               </div>
-              <StartBackground className='h-2.5 w-2.5 fill-current text-gray-1' />
+              <StartBackground className={noActiveClassRating} />
             </div>
           )
         })}
