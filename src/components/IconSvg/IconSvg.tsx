@@ -224,13 +224,13 @@ export const StartFull = ({ className }: IconProps) => {
           points='14.910357 6.35294118 12.4209136 7.66171903 12.896355 4.88968305 10.8823529 2.92651626 13.6656353 2.52208166 14.910357 0 16.1550787 2.52208166 18.9383611 2.92651626 16.924359 4.88968305 17.3998004 7.66171903'
         />
       </defs>
-      <g fill='url(#ratingStarGradient)' fillRule='evenodd' stroke='none' strokeWidth={1}>
+      <g fill='' fillRule='evenodd' stroke='none' strokeWidth={1}>
         <g transform='translate(-876 -1270)'>
           <g transform='translate(155 992)'>
             <g transform='translate(600 29)'>
               <g transform='translate(10 239)'>
                 <g transform='translate(101 10)'>
-                  <use stroke='#ffa727' strokeWidth='.5' xlinkHref='#ratingStar' />
+                  <use strokeWidth='.5' xlinkHref='#ratingStar' />
                 </g>
               </g>
             </g>
@@ -326,6 +326,60 @@ export const ArrowRightPagination = ({ className }: IconProps) => {
   return (
     <svg enableBackground='new 0 0 11 11' viewBox='0 0 11 11' x={0} y={0} className={className}>
       <path d='m2.5 11c .1 0 .2 0 .3-.1l6-5c .1-.1.2-.3.2-.4s-.1-.3-.2-.4l-6-5c-.2-.2-.5-.1-.7.1s-.1.5.1.7l5.5 4.6-5.5 4.6c-.2.2-.2.5-.1.7.1.1.3.2.4.2z' />
+    </svg>
+  )
+}
+
+export const ArrowRightProductDetailSlider = ({ className }: IconProps) => {
+  return (
+    <svg enableBackground='new 0 0 13 21' viewBox='0 0 13 21' x={0} y={0} className={className}>
+      <polygon points='11.1 9.9 2.1 .9 -.1 3.1 7.9 11 -.1 18.9 2.1 21 11.1 12 12.1 11' />
+    </svg>
+  )
+}
+
+export const ArrowLeftProductDetailSlider = ({ className }: IconProps) => {
+  return (
+    <svg enableBackground='new 0 0 13 20' viewBox='0 0 13 20' x={0} y={0} className={className}>
+      <polygon points='4.2 10 12.1 2.1 10 -.1 1 8.9 -.1 10 1 11 10 20 12.1 17.9' />
+    </svg>
+  )
+}
+
+export const Minus = ({ className }: IconProps) => {
+  return (
+    <svg enableBackground='new 0 0 10 10' viewBox='0 0 10 10' x={0} y={0} className={className}>
+      <polygon points='4.5 4.5 3.5 4.5 0 4.5 0 5.5 3.5 5.5 4.5 5.5 10 5.5 10 4.5' />
+    </svg>
+  )
+}
+
+export const Plus = ({ className }: IconProps) => {
+  return (
+    <svg enableBackground='new 0 0 10 10' viewBox='0 0 10 10' x={0} y={0} className={className}>
+      <polygon points='10 4.5 5.5 4.5 5.5 0 4.5 0 4.5 4.5 0 4.5 0 5.5 4.5 5.5 4.5 10 5.5 10 5.5 5.5 10 5.5' />
+    </svg>
+  )
+}
+
+export const CartButton = ({ className }: IconProps) => {
+  return (
+    <svg enableBackground='new 0 0 15 15' viewBox='0 0 15 15' x={0} y={0} className={className}>
+      <g>
+        <g>
+          <polyline
+            fill='none'
+            points='.5 .5 2.7 .5 5.2 11 12.4 11 14.5 3.5 3.7 3.5'
+            strokeLinecap='round'
+            strokeLinejoin='round'
+            strokeMiterlimit={10}
+          />
+          <circle cx={6} cy='13.5' r={1} stroke='none' />
+          <circle cx='11.5' cy='13.5' r={1} stroke='none' />
+        </g>
+        <line fill='none' strokeLinecap='round' strokeMiterlimit={10} x1='7.5' x2='10.5' y1={7} y2={7} />
+        <line fill='none' strokeLinecap='round' strokeMiterlimit={10} x1={9} x2={9} y1='8.5' y2='5.5' />
+      </g>
     </svg>
   )
 }

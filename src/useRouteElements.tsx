@@ -8,6 +8,7 @@ import HomePage from './pages/HomePage'
 import Profile from './pages/Profile'
 import { useAuth } from './contexts/auth.context'
 import { path } from './constants/path'
+import ProductDetail from './pages/ProductList/ProductDetail'
 
 const useRouteElements = () => {
   const ProtectedRoute = () => {
@@ -32,6 +33,10 @@ const useRouteElements = () => {
         {
           path: path.product,
           element: <ProductList />
+        },
+        {
+          path: path.productDetail,
+          element: <ProductDetail />
         },
         {
           path: path.profile,

@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { Product as ProductType } from 'src/types/product.type'
 import { formatCurrency, formatNumberToSocialStyle } from 'src/utils/utils'
 import ProductRating from '../ProductRating'
+import { path } from 'src/constants/path'
 
 interface Props {
   product: ProductType
@@ -9,7 +10,7 @@ interface Props {
 const ProductItem = ({ product }: Props) => {
   return (
     <Link
-      to=''
+      to={`${path.product}/${product._id}`}
       className='shadow-[0 0.0625rem 0.125rem 0 rgba(0,0,0,.1)] duration-50 relative flex flex-col overflow-hidden rounded-sm bg-white hover:translate-y-[-1px] hover:shadow-sm'
     >
       <div className='relative w-full pt-[100%]'>
