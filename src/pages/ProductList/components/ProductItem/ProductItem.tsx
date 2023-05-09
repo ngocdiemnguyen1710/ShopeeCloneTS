@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Product as ProductType } from 'src/types/product.type'
-import { formatCurrency, formatNumberToSocialStyle } from 'src/utils/utils'
+import { formatCurrency, formatNumberToSocialStyle, rateSale } from 'src/utils/utils'
 import ProductRating from '../ProductRating'
 import { path } from 'src/constants/path'
 
@@ -38,7 +38,7 @@ const ProductItem = ({ product }: Props) => {
       </div>
       <div className='absolute right-0 top-0 bg-yellow-400/90 p-0.5 text-xs leading-tight'>
         <div className=''>
-          <div className='text-center text-main-orange'>33%</div>
+          <div className='text-center text-main-orange'>{rateSale(product.price_before_discount, product.price)}</div>
           <div className='text-white'>GIẢM</div>
         </div>
         <span className='absolute right-0 top-[34px] border-b-0 border-l-[18px] border-r-0 border-t-4 border-l-transparent border-t-yellow-400/90'></span>
