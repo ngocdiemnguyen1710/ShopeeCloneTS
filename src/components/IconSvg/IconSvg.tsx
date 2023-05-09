@@ -221,6 +221,8 @@ export const StartFull = ({ className }: IconProps) => {
         </linearGradient>
         <polygon
           id='ratingStar'
+          strokeLinecap='round'
+          strokeLinejoin='round'
           points='14.910357 6.35294118 12.4209136 7.66171903 12.896355 4.88968305 10.8823529 2.92651626 13.6656353 2.52208166 14.910357 0 16.1550787 2.52208166 18.9383611 2.92651626 16.924359 4.88968305 17.3998004 7.66171903'
         />
       </defs>
