@@ -1,8 +1,8 @@
 import { StartEmpty, StartFull } from 'src/components/IconSvg'
-import { QueryConfig } from '../../ProductList'
 import { createSearchParams, useNavigate } from 'react-router-dom'
 import { path } from 'src/constants/path'
 import classNames from 'classnames'
+import { QueryConfig } from 'src/hooks/useQueryConfig'
 
 interface Props {
   queryConfig: QueryConfig
@@ -41,7 +41,9 @@ const RatingStar = ({ queryConfig }: Props) => {
                     if (indexStart < 5 - index) {
                       return (
                         <div key={indexStart}>
-                          <StartFull className={'h-4 w-4 fill-[url(#ratingStarGradient)] stroke-[#ffa727]'} />
+                          <StartFull
+                            className={'h-5 w-5 fill-[url(#ratingStarGradient)] stroke-[url(#ratingStarGradient)]'}
+                          />
                         </div>
                       )
                     }

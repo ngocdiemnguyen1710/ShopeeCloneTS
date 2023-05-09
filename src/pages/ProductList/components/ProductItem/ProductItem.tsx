@@ -36,14 +36,16 @@ const ProductItem = ({ product }: Props) => {
         </div>
         <div className='mt-3 min-h-[1rem] text-xs text-[rgba(0,0,0,.65)]'>TP. Hồ Chí Minh</div>
       </div>
-      <div className='absolute right-0 top-0 bg-yellow-400/90 p-0.5 text-xs leading-tight'>
-        <div className=''>
-          <div className='text-center text-main-orange'>{rateSale(product.price_before_discount, product.price)}</div>
-          <div className='text-white'>GIẢM</div>
+      {product.price_before_discount > product.price && (
+        <div className='absolute right-0 top-0 bg-yellow-400/90 p-0.5 text-xs leading-tight'>
+          <div className=''>
+            <div className='text-center text-main-orange'>{rateSale(product.price_before_discount, product.price)}</div>
+            <div className='text-white'>GIẢM</div>
+          </div>
+          <span className='absolute right-0 top-[34px] border-b-0 border-l-[18px] border-r-0 border-t-4 border-l-transparent border-t-yellow-400/90'></span>
+          <span className='absolute left-0 top-[34px] border-b-0 border-l-0 border-r-[18px] border-t-4 border-r-transparent border-t-yellow-400/90'></span>
         </div>
-        <span className='absolute right-0 top-[34px] border-b-0 border-l-[18px] border-r-0 border-t-4 border-l-transparent border-t-yellow-400/90'></span>
-        <span className='absolute left-0 top-[34px] border-b-0 border-l-0 border-r-[18px] border-t-4 border-r-transparent border-t-yellow-400/90'></span>
-      </div>
+      )}
     </Link>
   )
 }

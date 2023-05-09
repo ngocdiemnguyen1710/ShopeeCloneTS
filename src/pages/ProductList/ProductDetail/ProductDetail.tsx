@@ -1,23 +1,19 @@
 import { useQuery } from '@tanstack/react-query'
 import { useLocation, useParams } from 'react-router-dom'
 import productApi from 'src/apis/product.api'
-import {
-  ArrowLeftProductDetailSlider,
-  ArrowRightProductDetailSlider,
-  CartButton,
-  Minus,
-  Plus
-} from 'src/components/IconSvg'
+import { ArrowLeftProductDetailSlider, ArrowRightProductDetailSlider, CartButton } from 'src/components/IconSvg'
 import Controls from 'src/components/controls/Controls'
 import ProductRating from '../components/ProductRating'
 import { formatCurrency, getIdFromNameId, rateSale } from 'src/utils/utils'
-import InputNumber from 'src/components/controls/InputNumber'
 import DOMPurify from 'dompurify'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Product, ProductConfig } from 'src/types/product.type'
 import ProductItem from '../components/ProductItem'
+import QuantityController from '../components/QuantityController'
 
 const ProductDetail = () => {
+  const [buyCount, setBuyCount] = useState(1)
+
   const location = useLocation()
   const { nameId } = useParams()
   const id = getIdFromNameId(nameId as string)
@@ -100,6 +96,10 @@ const ProductDetail = () => {
   const handleRemoveZoom = () => {
     imageRef.current?.removeAttribute('style')
   }
+
+  const handleBuy = (value: number) => {
+    setBuyCount(value)
+  }
   if (!product) return null
   return (
     <div className='min-w-[100vh] bg-contain-gray p-3 text-main-black'>
@@ -180,19 +180,13 @@ const ProductDetail = () => {
                 <div className='flex items-center pb-3'>
                   <div className='w-[110px] text-[0.875rem] capitalize text-[#757575]'>Số lượng</div>
                   <div className='flex items-center'>
-                    <div className='mr-[15px] flex items-center'>
-                      <Controls.Button className='h-8 w-8 rounded-l-sm border'>
-                        <Minus className='h-2.5 w-2.5 fill-[rgba(0,0,0,.8)]' />
-                      </Controls.Button>
-                      <InputNumber
-                        classNameInput='h-8 w-[50px] border-x-0 border-y text-base text-center'
-                        value={1}
-                        classNameError='hidden'
-                      />
-                      <Controls.Button className='h-8 w-8 rounded-r-sm border'>
-                        <Plus className='h-2.5 w-2.5 fill-[rgba(0,0,0,.8)]' />
-                      </Controls.Button>
-                    </div>
+                    <QuantityController
+                      value={buyCount}
+                      onIncrease={handleBuy}
+                      onDecrease={handleBuy}
+                      onType={handleBuy}
+                      max={product.quantity}
+                    />
                     <div className='text-[0.875rem] text-[#757575]'>{product?.quantity} sản phẩm có sẵn</div>
                   </div>
                 </div>
