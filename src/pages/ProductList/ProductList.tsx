@@ -3,14 +3,13 @@ import Aside from './components/Aside'
 import Sort from './components/Sort'
 import ProductItem from './components/ProductItem'
 import { useQuery } from '@tanstack/react-query'
-import { useQueryParams } from 'src/hooks/useQueryParams'
 import productApi from 'src/apis/product.api'
 import Pagination from './components/Pagination'
 import { ProductConfig } from 'src/types/product.type'
-import { isUndefined, omitBy } from 'lodash'
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import categoryApi from 'src/apis/category.api'
+import useQueryConfig from 'src/hooks/useQueryConfig'
 
 const slides = [
   {
@@ -24,33 +23,19 @@ const slides = [
   }
 ]
 
-export type QueryConfig = {
-  [key in keyof ProductConfig]: string
-}
-
 const ProductList = () => {
-  const queryParams: QueryConfig = useQueryParams()
-  const queryConfig: QueryConfig = omitBy(
-    {
-      page: queryParams.page || '1',
-      exclude: queryParams.exclude,
-      limit: queryParams.limit,
-      name: queryParams.name,
-      order: queryParams.order,
-      price_max: queryParams.price_max,
-      price_min: queryParams.price_min,
-      rating_filter: queryParams.rating_filter,
-      sort_by: queryParams.sort_by,
-      category: queryParams.category
-    },
-    isUndefined
-  )
+  const location = useLocation()
+  const productListElement = document.getElementById('product-list')
+
+  const queryConfig = useQueryConfig()
+
   const { data: ProductsData } = useQuery({
     queryKey: ['products', queryConfig],
     queryFn: () => {
       return productApi.getProducts(queryConfig as ProductConfig)
     },
-    keepPreviousData: true
+    keepPreviousData: true,
+    staleTime: 3 * 60 * 1000
   })
 
   const { data: CategoriesData } = useQuery({
@@ -60,15 +45,18 @@ const ProductList = () => {
     }
   })
 
-  const location = useLocation()
-
-  const productListElement = document.getElementById('product-list')
   useEffect(() => {
-    window.scrollTo({
-      top: productListElement?.offsetTop,
-      behavior: 'smooth'
-    })
-  }, [location, productListElement?.offsetTop])
+    const { category, name, order, price_max, price_min, rating_filter, sort_by } = queryConfig
+    const productListTop = productListElement?.offsetTop
+    if (category || name || order || price_min || price_max || rating_filter || sort_by) {
+      window.scrollTo({
+        top: productListTop,
+        behavior: 'smooth'
+      })
+    } else {
+      window.scrollTo(0, 0)
+    }
+  }, [location, productListElement?.offsetTop, queryConfig])
 
   return (
     <div className='min-w-[100vh] bg-contain-gray p-3 text-main-black'>

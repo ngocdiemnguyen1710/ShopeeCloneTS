@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, createSearchParams, useNavigate } from 'react-router-dom'
 import { FaFacebook } from 'react-icons/fa'
 import { RiInstagramFill } from 'react-icons/ri'
 import { ArrowDown, AvatarDefault, Bell, Cart, Language, Logo, SearchIcon, Support } from '../IconSvg'
@@ -7,9 +7,27 @@ import { useMutation } from '@tanstack/react-query'
 import authApi from 'src/apis/auth.api'
 import { useAuth } from 'src/contexts/auth.context'
 import { path } from 'src/constants/path'
+import useQueryConfig from 'src/hooks/useQueryConfig'
+import { Schema, schema } from 'src/utils/rules'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { omit } from 'lodash'
+
+type FormData = Pick<Schema, 'name'>
+const searchSchema = schema.pick(['name'])
 
 const Header = () => {
   const { isAuthenticated, setIsAuthenticated, profile, setProfile } = useAuth()
+  const queryConfig = useQueryConfig()
+  const navigate = useNavigate()
+
+  const { handleSubmit, register } = useForm<FormData>({
+    defaultValues: {
+      name: ''
+    },
+    resolver: yupResolver(searchSchema)
+  })
+
   const logoutMutation = useMutation({
     mutationFn: authApi.logoutAccount,
     onSuccess: () => {
@@ -21,6 +39,25 @@ const Header = () => {
   const handleLogout = () => {
     logoutMutation.mutate()
   }
+
+  const onSubmitSearch = handleSubmit((data) => {
+    const config = queryConfig.order
+      ? omit(
+          {
+            ...queryConfig,
+            name: data.name
+          },
+          ['order', 'sort_by']
+        )
+      : {
+          ...queryConfig,
+          name: data.name
+        }
+    navigate({
+      pathname: path.product,
+      search: createSearchParams(config).toString()
+    })
+  })
   return (
     <div className='bg-[linear-gradient(-180deg,#f53d2d,#f63)]'>
       <div className='container relative z-20 flex items-center justify-between py-1.5 text-white '>
@@ -128,9 +165,14 @@ const Header = () => {
           <Link to='/' className='col-span-2'>
             <Logo className='h-11 fill-white' />
           </Link>
-          <form className='col-span-8'>
+          <form className='col-span-8' onSubmit={onSubmitSearch}>
             <div className='flex h-full items-center rounded-sm bg-white p-1'>
-              <input className='flex-1 px-2 outline-none' placeholder='Deal 50%, Mua là có quà' />
+              <input
+                className='flex-1 px-2 outline-none'
+                type='text'
+                placeholder='Deal 50%, Mua là có quà'
+                {...register('name')}
+              />
               <button className='h-full rounded-sm bg-[#fb5533] px-6 hover:opacity-90'>
                 <SearchIcon className='fill-white stroke-white' />
               </button>
