@@ -1,12 +1,12 @@
 import classNames from 'classnames'
 import { ThinArrowLeft, ThinArrowRight } from 'src/components/IconSvg'
 import Controls from 'src/components/controls/Controls'
-import { QueryConfig } from '../../ProductList'
 import { orderConstant, sortBy } from 'src/constants/product'
 import { ProductConfig } from 'src/types/product.type'
 import { Link, createSearchParams, useNavigate } from 'react-router-dom'
 import { path } from 'src/constants/path'
 import { omit } from 'lodash'
+import { QueryConfig } from 'src/hooks/useQueryConfig'
 
 interface Props {
   queryConfig: QueryConfig

@@ -2,7 +2,6 @@ import { Link, NavLink, createSearchParams, useNavigate } from 'react-router-dom
 import { ArrowRight, FilterIcon, List } from 'src/components/IconSvg'
 import Controls from 'src/components/controls/Controls'
 import { Category } from 'src/types/category.type'
-import { QueryConfig } from '../../ProductList'
 import classNames from 'classnames'
 import { path } from 'src/constants/path'
 import { Controller, useForm } from 'react-hook-form'
@@ -11,6 +10,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { NoUndefinedField } from 'src/types/utils.type'
 import RatingStar from '../RatingStar'
 import { omit } from 'lodash'
+import { QueryConfig } from 'src/hooks/useQueryConfig'
 
 interface Props {
   categories: Category[]

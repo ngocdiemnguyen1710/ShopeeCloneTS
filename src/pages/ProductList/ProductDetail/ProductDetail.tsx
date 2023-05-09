@@ -10,16 +10,17 @@ import {
 } from 'src/components/IconSvg'
 import Controls from 'src/components/controls/Controls'
 import ProductRating from '../components/ProductRating'
-import { formatCurrency, rateSale } from 'src/utils/utils'
+import { formatCurrency, getIdFromNameId, rateSale } from 'src/utils/utils'
 import InputNumber from 'src/components/controls/InputNumber'
 import DOMPurify from 'dompurify'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Product } from 'src/types/product.type'
-import { unset } from 'lodash'
+import { Product, ProductConfig } from 'src/types/product.type'
+import ProductItem from '../components/ProductItem'
 
 const ProductDetail = () => {
   const location = useLocation()
-  const { id } = useParams()
+  const { nameId } = useParams()
+  const id = getIdFromNameId(nameId as string)
   const imageRef = useRef<HTMLImageElement>(null)
   const { data: ProductDetails } = useQuery({
     queryKey: ['productDetails', id],
@@ -35,6 +36,19 @@ const ProductDetail = () => {
     () => (product ? product.images.slice(...currentIndexImage) : []),
     [product, currentIndexImage]
   )
+
+  const queryConfig: ProductConfig = { limit: '20', category: product?.category._id, page: '1' }
+
+  const { data: ProductsData } = useQuery({
+    queryKey: ['products', queryConfig],
+    queryFn: () => {
+      return productApi.getProducts(queryConfig)
+    },
+    staleTime: 3 * 60 * 1000,
+    enabled: Boolean(product) //Khi nào có sản phẩm mới gọi api
+  })
+
+  console.log(ProductsData)
 
   useEffect(() => {
     if (product && product.images.length > 0) {
@@ -90,7 +104,7 @@ const ProductDetail = () => {
   return (
     <div className='min-w-[100vh] bg-contain-gray p-3 text-main-black'>
       <div className='container'>
-        <div className='mt-4 grid grid-cols-12 rounded-sm bg-white'>
+        <div className='mt-4 grid grid-cols-12 rounded-sm bg-white pb-[20px]'>
           <div className='col-span-5 p-[15px]'>
             <div
               className='relative w-full cursor-zoom-in overflow-hidden pt-[100%]'
@@ -218,6 +232,22 @@ const ProductDetail = () => {
               }}
             />
           </div>
+        </div>
+        <div className='mb-2 mt-8'>
+          {ProductsData && (
+            <>
+              <div className='text-base uppercase text-[rgba(0,0,0,.54)]'>Có thể bạn cũng thích</div>
+              <div className='mt-2 grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-6'>
+                {ProductsData?.data?.data.products?.map((product) => {
+                  return (
+                    <div key={product._id} className='col-span-1'>
+                      <ProductItem product={product} />
+                    </div>
+                  )
+                })}
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>
