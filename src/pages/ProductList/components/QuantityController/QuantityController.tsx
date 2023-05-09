@@ -3,14 +3,14 @@ import Controls from 'src/components/controls/Controls'
 import InputNumber, { InputNumberProps } from 'src/components/controls/InputNumber'
 
 interface Props extends InputNumberProps {
-  classNameWrapper?: string
+  classNameWrap?: string
   max?: number
   onIncrease?: (value: number) => void
   onDecrease?: (value: number) => void
   onType?: (value: number) => void
 }
 const QuantityController = ({
-  classNameWrapper = 'mr-[15px]',
+  classNameWrap = 'mr-[15px]',
   value,
   max,
   onIncrease,
@@ -45,7 +45,7 @@ const QuantityController = ({
     onDecrease && onDecrease(_value)
   }
   return (
-    <div className={'flex items-center' + classNameWrapper}>
+    <div className={'flex items-center' + classNameWrap}>
       <Controls.Button className='h-8 w-8 rounded-l-sm border' onClick={decrease}>
         <Minus className='h-2.5 w-2.5 fill-[rgba(0,0,0,.8)]' />
       </Controls.Button>
