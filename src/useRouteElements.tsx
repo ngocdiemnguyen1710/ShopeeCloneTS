@@ -9,6 +9,7 @@ import Profile from './pages/Profile'
 import { useAuth } from './contexts/auth.context'
 import { path } from './constants/path'
 import ProductDetail from './pages/ProductList/ProductDetail'
+import Cart from './pages/Cart'
 
 const useRouteElements = () => {
   const ProtectedRoute = () => {
@@ -39,12 +40,15 @@ const useRouteElements = () => {
           element: <ProductDetail />
         },
         {
-          path: path.profile,
           element: <ProtectedRoute />,
           children: [
             {
-              index: true,
+              path: path.profile,
               element: <Profile />
+            },
+            {
+              path: path.cart,
+              element: <Cart />
             }
           ]
         }
