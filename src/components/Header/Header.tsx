@@ -3,7 +3,7 @@ import { FaFacebook } from 'react-icons/fa'
 import { RiInstagramFill } from 'react-icons/ri'
 import { ArrowDown, AvatarDefault, Bell, Cart, Language, Logo, SearchIcon, Support } from '../IconSvg'
 import Popper from '../Popper'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import authApi from 'src/apis/auth.api'
 import { useAuth } from 'src/contexts/auth.context'
 import { path } from 'src/constants/path'
@@ -12,11 +12,16 @@ import { Schema, schema } from 'src/utils/rules'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { omit } from 'lodash'
+import { PurchasesStatus } from 'src/constants/purchase'
+import purchaseApi from 'src/apis/purchase.api'
+import { formatCurrency, generateNameId, handleLimitNumber } from 'src/utils/utils'
+import NoCart from '../../assets/images/no-cart.png'
 
 type FormData = Pick<Schema, 'name'>
 const searchSchema = schema.pick(['name'])
-
+const MAX_PURCHASE = 5
 const Header = () => {
+  const queryClient = useQueryClient()
   const { isAuthenticated, setIsAuthenticated, profile, setProfile } = useAuth()
   const queryConfig = useQueryConfig()
   const navigate = useNavigate()
@@ -33,12 +38,19 @@ const Header = () => {
     onSuccess: () => {
       setIsAuthenticated(false)
       setProfile(null)
+      queryClient.removeQueries({ queryKey: ['purchases', { status: PurchasesStatus.inCart }] })
     }
   })
 
   const handleLogout = () => {
     logoutMutation.mutate()
   }
+
+  const { data: purchaseInCartData } = useQuery({
+    queryKey: ['purchases', { status: PurchasesStatus.inCart }],
+    queryFn: () => purchaseApi.getPurchases({ status: PurchasesStatus.inCart }),
+    enabled: isAuthenticated
+  })
 
   const onSubmitSearch = handleSubmit((data) => {
     const config = queryConfig.order
@@ -58,6 +70,8 @@ const Header = () => {
       search: createSearchParams(config).toString()
     })
   })
+
+  const purchases = purchaseInCartData?.data.data
   return (
     <div className='bg-[linear-gradient(-180deg,#f53d2d,#f63)]'>
       <div className='container relative z-20 flex items-center justify-between py-1.5 text-white '>
@@ -184,65 +198,68 @@ const Header = () => {
                 <Link to='' className='relative col-start-11 ml-5 flex h-full cursor-pointer items-end'>
                   <Cart className='h-7 w-7' />
                 </Link>
-                <div className='absolute right-4 top-2 flex h-5 w-7 items-center justify-center rounded-full border-[0.125rem] border-[#ee4d2d] bg-white py-2'>
-                  <span className='text-sm text-main-orange'>72</span>
-                </div>
+
+                {purchases && (
+                  <div className='absolute right-3 top-2 flex h-5 w-8 items-center justify-center rounded-full border-[0.125rem] border-[#ee4d2d] bg-white'>
+                    <span className='text-sm text-main-orange'>{handleLimitNumber(purchases.length)}</span>
+                  </div>
+                )}
               </>
             }
           >
-            <div className='w-[370px] rounded-sm bg-white shadow-md'>
-              <div className=' w-full p-3 text-sm capitalize text-gray-300'>Sản phẩm mới thêm</div>
-              <ul className='flex w-full flex-col items-center justify-start bg-white text-[#333]'>
-                <li className='w-full cursor-pointer px-3 py-3 hover:bg-[#fafafa]'>
-                  <Link to=''>
-                    <div className='flex justify-between'>
-                      <div className='flex'>
-                        <div className='border-px h-11 w-11 flex-shrink-0 border-gray-1'>
-                          <img src='' alt='' className='h-full w-full' />
-                        </div>
-                        <span className='... ml-2 max-w-[225px] flex-grow truncate text-sm'>
-                          Kem nền BB O.TWO.O che khuyết điểm tự nhiên kiềm dầu không bết dính 60g với 4 màu tùy chọn
-                        </span>
-                      </div>
-                      <div className='text-sm text-main-orange'>đ52.000</div>
+            <div className='rounded-sm bg-white shadow-md'>
+              {purchases ? (
+                <div className='w-[370px]'>
+                  <div className='w-full p-3 text-[0.875rem] capitalize text-gray-300'>Sản phẩm mới thêm</div>
+                  <ul className='flex w-full flex-col items-center justify-start bg-white text-[#333]'>
+                    {purchases?.slice(0, MAX_PURCHASE).map((purchase) => {
+                      return (
+                        <li className='w-full px-3 py-3 hover:bg-[#fafafa]' key={purchase._id}>
+                          <button
+                            onClick={() =>
+                              navigate(
+                                `${path.product}/${generateNameId({
+                                  name: purchase.product.name,
+                                  id: purchase.product._id
+                                })}`
+                              )
+                            }
+                          >
+                            <div className='flex justify-between'>
+                              <div className='flex'>
+                                <div className='h-11 w-11 flex-shrink-0 overflow-hidden border border-gray-1 '>
+                                  <img
+                                    src={purchase.product.image}
+                                    alt={purchase.product.name}
+                                    className='h-full w-full'
+                                  />
+                                </div>
+                                <span className='... ml-2 max-w-[220px] flex-grow truncate text-[0.875rem]'>
+                                  {purchase.product.name}
+                                </span>
+                              </div>
+                              <div className='text-[0.875rem] text-main-orange'>₫{formatCurrency(purchase.price)}</div>
+                            </div>
+                          </button>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                  <div className='flex w-full items-center justify-between bg-[#fafafa] p-3'>
+                    <div className='text-xs text-gray-600'>
+                      {purchases.length > MAX_PURCHASE ? purchases.length - MAX_PURCHASE : 0} Thêm vào giỏ hàng
                     </div>
-                  </Link>
-                </li>
-                <li className='w-full cursor-pointer px-3 py-3 hover:bg-[#fafafa]'>
-                  <Link to=''>
-                    <div className='flex justify-between'>
-                      <div className='flex'>
-                        <div className='border-px h-11 w-11 flex-shrink-0 border-gray-1'>
-                          <img src='' alt='' className='h-full w-full' />
-                        </div>
-                        <span className='... ml-2 max-w-[225px] flex-grow truncate text-sm'>
-                          Kem nền BB O.TWO.O che khuyết điểm tự nhiên kiềm dầu không bết dính 60g với 4 màu tùy chọn
-                        </span>
-                      </div>
-                      <div className='text-sm text-main-orange'>đ52.000</div>
-                    </div>
-                  </Link>
-                </li>
-                <li className='w-full cursor-pointer px-3 py-3 hover:bg-[#fafafa]'>
-                  <Link to=''>
-                    <div className='flex justify-between'>
-                      <div className='flex'>
-                        <div className='border-px h-11 w-11 flex-shrink-0 border-gray-1'>
-                          <img src='' alt='' className='h-full w-full' />
-                        </div>
-                        <span className='... ml-2 max-w-[225px] flex-grow truncate text-sm'>
-                          Kem nền BB O.TWO.O che khuyết điểm tự nhiên kiềm dầu không bết dính 60g với 4 màu tùy chọn
-                        </span>
-                      </div>
-                      <div className='text-sm text-main-orange'>đ52.000</div>
-                    </div>
-                  </Link>
-                </li>
-              </ul>
-              <div className='flex w-full items-center justify-between bg-[#fafafa] p-3'>
-                <div className='text-xs text-gray-600'>67 Thêm vào giỏ hàng</div>
-                <button className='rounded-sm bg-main-orange px-4 py-2 text-sm text-white'>Xem giỏ hàng</button>
-              </div>
+                    <Link to={path.cart} className='rounded-sm bg-main-orange px-4 py-2 text-sm text-white'>
+                      Xem giỏ hàng
+                    </Link>
+                  </div>
+                </div>
+              ) : (
+                <div className='flex h-[350px] w-[350px] flex-col items-center justify-center'>
+                  <img src={NoCart} alt='no-cart' className='h-24 w-24' />
+                  <div className='mt-3 text-center text-sm capitalize'>Chưa có sản phẩm</div>
+                </div>
+              )}
             </div>
           </Popper>
         </div>

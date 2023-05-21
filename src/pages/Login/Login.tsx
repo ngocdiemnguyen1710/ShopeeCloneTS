@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom'
 import authApi from 'src/apis/auth.api'
 import { Check, Eye, EyeSlash } from 'src/components/IconSvg'
 import Controls from 'src/components/controls/Controls'
+import { path } from 'src/constants/path'
 import { useAuth } from 'src/contexts/auth.context'
 import { ErrorRespone } from 'src/types/utils.type'
 import { Schema, schema } from 'src/utils/rules'
@@ -148,7 +149,7 @@ const Login = () => {
                 </div>
                 <div className='mt-5 flex items-center justify-center text-sm'>
                   <p className='mr-1 text-gray-text'>Bạn mới biết đến Shopee?</p>{' '}
-                  <Link to={'/register'} className='text-main-orange'>
+                  <Link to={path.register} className='text-main-orange'>
                     Đăng ký
                   </Link>
                 </div>

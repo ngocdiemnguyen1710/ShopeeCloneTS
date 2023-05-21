@@ -1,8 +1,8 @@
 import classNames from 'classnames'
 import { ArrowLeftPagination, ArrowRightPagination } from 'src/components/IconSvg'
-import { QueryConfig } from '../../ProductList'
 import { Link, createSearchParams } from 'react-router-dom'
 import { path } from 'src/constants/path'
+import { QueryConfig } from 'src/hooks/useQueryConfig'
 
 interface Props {
   queryConfig: QueryConfig

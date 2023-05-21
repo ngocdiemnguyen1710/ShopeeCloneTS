@@ -13,6 +13,7 @@ import { isAxiosErrorUnprocessableEntity } from 'src/utils/utils'
 import { ErrorRespone } from 'src/types/utils.type'
 import { useAuth } from 'src/contexts/auth.context'
 import Controls from 'src/components/controls/Controls'
+import { path } from 'src/constants/path'
 
 type FormData = Pick<Schema, 'email' | 'password' | 'confirm_password'>
 
@@ -186,7 +187,7 @@ const Register = () => {
                 </div>
                 <div className='flex items-center justify-center text-sm'>
                   <p className='mr-1 text-gray-text'>Bạn đã có tài khoản?</p>{' '}
-                  <Link to={'/login'} className='text-main-orange'>
+                  <Link to={path.login} className='text-main-orange'>
                     Đăng nhập
                   </Link>
                 </div>

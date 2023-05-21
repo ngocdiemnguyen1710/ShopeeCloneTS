@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Minus, Plus } from 'src/components/IconSvg'
 import Controls from 'src/components/controls/Controls'
 import InputNumber, { InputNumberProps } from 'src/components/controls/InputNumber'
@@ -18,6 +19,8 @@ const QuantityController = ({
   onType,
   ...rest
 }: Props) => {
+  const [localValue, setLocalValue] = useState<number>(Number(value))
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let _value = Number(e.target.value)
     if (max !== undefined && _value > max) {
@@ -27,22 +30,25 @@ const QuantityController = ({
     }
 
     onType && onType(_value)
+    setLocalValue(_value)
   }
 
   const increase = () => {
-    let _value = Number(value) + 1
+    let _value = Number(value || localValue) + 1
     if (max !== undefined && _value > max) {
       _value = max
     }
     onIncrease && onIncrease(_value)
+    setLocalValue(_value)
   }
 
   const decrease = () => {
-    let _value = Number(value) - 1
+    let _value = Number(value || localValue) - 1
     if (_value < 1) {
       _value = 1
     }
     onDecrease && onDecrease(_value)
+    setLocalValue(_value)
   }
   return (
     <div className={'flex items-center' + classNameWrap}>

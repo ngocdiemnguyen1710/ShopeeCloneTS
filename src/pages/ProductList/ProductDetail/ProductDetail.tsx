@@ -1,15 +1,17 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useLocation, useParams } from 'react-router-dom'
 import productApi from 'src/apis/product.api'
 import { ArrowLeftProductDetailSlider, ArrowRightProductDetailSlider, CartButton } from 'src/components/IconSvg'
 import Controls from 'src/components/controls/Controls'
 import ProductRating from '../components/ProductRating'
-import { formatCurrency, getIdFromNameId, rateSale } from 'src/utils/utils'
+import { formatCurrency, formatNumberToSocialStyle, getIdFromNameId, rateSale } from 'src/utils/utils'
 import DOMPurify from 'dompurify'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Product, ProductConfig } from 'src/types/product.type'
 import ProductItem from '../components/ProductItem'
-import QuantityController from '../components/QuantityController'
+import purchaseApi from 'src/apis/purchase.api'
+import { toast } from 'react-hot-toast'
+import { PurchasesStatus } from 'src/constants/purchase'
 
 const ProductDetail = () => {
   const [buyCount, setBuyCount] = useState(1)
@@ -18,6 +20,9 @@ const ProductDetail = () => {
   const { nameId } = useParams()
   const id = getIdFromNameId(nameId as string)
   const imageRef = useRef<HTMLImageElement>(null)
+
+  const queryClient = useQueryClient()
+
   const { data: ProductDetails } = useQuery({
     queryKey: ['productDetails', id],
     queryFn: () => {
@@ -44,7 +49,9 @@ const ProductDetail = () => {
     enabled: Boolean(product) //Khi nào có sản phẩm mới gọi api
   })
 
-  console.log(ProductsData)
+  const mutationPurchase = useMutation({
+    mutationFn: (body: { product_id: string; buy_count: number }) => purchaseApi.addToCart(body)
+  })
 
   useEffect(() => {
     if (product && product.images.length > 0) {
@@ -67,7 +74,6 @@ const ProductDetail = () => {
   }
 
   const prev = () => {
-    console.log(currentIndexImage[1])
     if (currentIndexImage[0] > 0) {
       setCurrentIndexImage((prev) => [prev[0] - 1, prev[1] - 1])
     }
@@ -100,6 +106,19 @@ const ProductDetail = () => {
   const handleBuy = (value: number) => {
     setBuyCount(value)
   }
+
+  const addToCart = () => {
+    return mutationPurchase.mutate(
+      { product_id: product?._id as string, buy_count: buyCount },
+      {
+        onSuccess: (data) => {
+          toast.success(data.data.message)
+          queryClient.invalidateQueries({ queryKey: ['purchases', { status: PurchasesStatus.inCart }] })
+        }
+      }
+    )
+  }
+
   if (!product) return null
   return (
     <div className='min-w-[100vh] bg-contain-gray p-3 text-main-black'>
@@ -152,7 +171,9 @@ const ProductDetail = () => {
                 <h1 className='text-xl font-medium'>{product?.name}</h1>
                 <div className='mt-[0.625rem] flex items-center'>
                   <div className='flex items-center pr-[15px]'>
-                    <div className='mr-1 border-b border-main-orange text-main-orange'>{product?.rating}</div>
+                    <div className='mr-1 border-b border-main-orange text-main-orange'>
+                      {formatCurrency(product?.rating)}
+                    </div>
                     <ProductRating
                       rating={product?.rating}
                       activeClassRating='fill-main-orange h-4 w-4 stroke-main-orange'
@@ -160,7 +181,7 @@ const ProductDetail = () => {
                     />
                   </div>
                   <div className='border-text-gray-1 flex items-center border-l px-[15px]'>
-                    <div className='mr-1'>{product?.sold}</div>
+                    <div className='mr-1'>{formatNumberToSocialStyle(product?.sold)}</div>
                     <div className='mr-1 text-[0.875rem] capitalize text-[#767676]'>Đã bán</div>
                   </div>
                 </div>
@@ -180,18 +201,21 @@ const ProductDetail = () => {
                 <div className='flex items-center pb-3'>
                   <div className='w-[110px] text-[0.875rem] capitalize text-[#757575]'>Số lượng</div>
                   <div className='flex items-center'>
-                    <QuantityController
+                    <Controls.QuantityController
                       value={buyCount}
                       onIncrease={handleBuy}
                       onDecrease={handleBuy}
                       onType={handleBuy}
                       max={product.quantity}
                     />
-                    <div className='text-[0.875rem] text-[#757575]'>{product?.quantity} sản phẩm có sẵn</div>
+                    <div className='ml-3 text-[0.875rem] text-[#757575]'>{product?.quantity} sản phẩm có sẵn</div>
                   </div>
                 </div>
                 <div className='mb-[30px] mt-[15px] flex items-center'>
-                  <Controls.Button className='mr-4 h-12 rounded-sm border border-main-orange bg-[rgba(255,87,34,0.1)] px-5 hover:opacity-70'>
+                  <Controls.Button
+                    onClick={addToCart}
+                    className='mr-4 h-12 rounded-sm border border-main-orange bg-[rgba(255,87,34,0.1)] px-5 hover:opacity-70'
+                  >
                     <CartButton className='mr-2.5 h-5 w-5 fill-main-orange stroke-main-orange' />
                     <span className='capitalize text-main-orange'>Thêm vào giỏ hàng</span>
                   </Controls.Button>
