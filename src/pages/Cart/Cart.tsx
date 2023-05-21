@@ -1,17 +1,56 @@
 import { useQuery } from '@tanstack/react-query'
+import { produce } from 'immer'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import purchaseApi from 'src/apis/purchase.api'
 import Controls from 'src/components/controls/Controls'
 import { path } from 'src/constants/path'
 import { PurchasesStatus } from 'src/constants/purchase'
+import { Purchase } from 'src/types/purchase.type'
 import { formatCurrency, generateNameId } from 'src/utils/utils'
 
+interface ExtendedPurchases extends Purchase {
+  disabled: boolean
+  checked: boolean
+}
 const Cart = () => {
+  const [extendedPurchases, setExtendedPurchases] = useState<ExtendedPurchases[]>([])
   const { data: purchasesInCart } = useQuery({
     queryKey: ['purchases', { status: PurchasesStatus.inCart }],
     queryFn: () => purchaseApi.getPurchases({ status: PurchasesStatus.inCart })
   })
   const purchases = purchasesInCart?.data.data
+
+  const isCheckAll = extendedPurchases.every((item) => item.checked)
+
+  useEffect(() => {
+    setExtendedPurchases(
+      purchases?.map((purchase) => {
+        return {
+          ...purchase,
+          disabled: false,
+          checked: false
+        }
+      }) || []
+    )
+  }, [purchases])
+
+  const handleCheck = (productIndex: number) => (e: ChangeEvent<HTMLInputElement>) => {
+    setExtendedPurchases(
+      produce((draft) => {
+        draft[productIndex].checked = e.target.checked
+      })
+    )
+  }
+
+  const handleCheckAll = () => {
+    setExtendedPurchases((prev) =>
+      prev.map((purchase) => ({
+        ...purchase,
+        checked: !isCheckAll
+      }))
+    )
+  }
   return (
     <div className='min-h-[100vh] bg-contain-gray sm:p-3'>
       <div className='sm:container'>
@@ -25,6 +64,8 @@ const Cart = () => {
                     name=''
                     id=''
                     className='shadow-[inset 0 2px 0 0 rgba(0,0,0,.02)] mr-4 h-4 w-4 accent-main-orange'
+                    checked={isCheckAll}
+                    onChange={handleCheckAll}
                   />
                   <div className='capitalize text-[rgba(0,0,0,.8)]'>Sản phẩm</div>
                 </div>
@@ -39,7 +80,7 @@ const Cart = () => {
               </div>
             </div>
             <div className='mb-3 rounded-sm bg-white px-2 text-[12px] sm:px-3 sm:text-[14px]'>
-              {purchases?.map((prod) => {
+              {extendedPurchases?.map((prod, index) => {
                 return (
                   <>
                     <div key={prod._id} className='grid grid-cols-12 items-center px-3 py-5 sm:px-7'>
@@ -50,6 +91,8 @@ const Cart = () => {
                             name=''
                             id=''
                             className='shadow-[inset 0 2px 0 0 rgba(0,0,0,.02)] mr-4 h-4 w-4 accent-main-orange'
+                            checked={prod.checked}
+                            onChange={handleCheck(index)}
                           />
                           <img
                             src={prod.product.image}
@@ -98,11 +141,13 @@ const Cart = () => {
               name=''
               id=''
               className='shadow-[inset 0 2px 0 0 rgba(0,0,0,.02)] mr-8 h-4 w-4 accent-main-orange'
+              checked={isCheckAll}
+              onChange={handleCheckAll}
             />
-            <div className='mr-8 text-center text-[13px] sm:text-[16px]'>
+            <button className='mr-8 text-center text-[13px] sm:text-[16px]' onClick={handleCheckAll}>
               <div className='capitalize'>Chọn tất cả</div>
-              <div>(2)</div>
-            </div>
+              <div>({extendedPurchases.length})</div>
+            </button>
             <div className='text-[13px] sm:text-[16px]'>
               <Controls.Button>Xóa</Controls.Button>
             </div>
