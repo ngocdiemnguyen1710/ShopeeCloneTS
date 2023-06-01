@@ -1,6 +1,8 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { produce } from 'immer'
+import { keyBy } from 'lodash'
 import { ChangeEvent, useEffect, useState } from 'react'
+import { toast } from 'react-hot-toast'
 import { Link } from 'react-router-dom'
 import purchaseApi from 'src/apis/purchase.api'
 import Controls from 'src/components/controls/Controls'
@@ -15,24 +17,52 @@ interface ExtendedPurchases extends Purchase {
 }
 const Cart = () => {
   const [extendedPurchases, setExtendedPurchases] = useState<ExtendedPurchases[]>([])
-  const { data: purchasesInCart } = useQuery({
+  const { data: purchasesInCart, refetch } = useQuery({
     queryKey: ['purchases', { status: PurchasesStatus.inCart }],
     queryFn: () => purchaseApi.getPurchases({ status: PurchasesStatus.inCart })
   })
-  const purchases = purchasesInCart?.data.data
+  const updatePurchaseMutation = useMutation({
+    mutationFn: purchaseApi.updatePurchase,
+    onSuccess: () => {
+      refetch()
+    }
+  })
 
+  const buyProductsMutation = useMutation({
+    mutationFn: purchaseApi.buyProducts,
+    onSuccess: (data) => {
+      refetch()
+      toast.success(data.data.message, {
+        position: 'top-center'
+      })
+    }
+  })
+
+  const deletePurchasesMutation = useMutation({
+    mutationFn: purchaseApi.deletePurchase,
+    onSuccess: () => {
+      refetch()
+    }
+  })
+
+  const purchases = purchasesInCart?.data.data
   const isCheckAll = extendedPurchases.every((item) => item.checked)
+  const checkedPurchases = extendedPurchases.filter((item) => item.checked)
+  const checkedPurchasesCount = checkedPurchases.length
 
   useEffect(() => {
-    setExtendedPurchases(
-      purchases?.map((purchase) => {
-        return {
-          ...purchase,
-          disabled: false,
-          checked: false
-        }
-      }) || []
-    )
+    setExtendedPurchases((prev) => {
+      const extendedPurchasesObject = keyBy(prev, '_id')
+      return (
+        purchases?.map((purchase) => {
+          return {
+            ...purchase,
+            disabled: false,
+            checked: Boolean(extendedPurchasesObject[purchase._id]?.checked)
+          }
+        }) || []
+      )
+    })
   }, [purchases])
 
   const handleCheck = (productIndex: number) => (e: ChangeEvent<HTMLInputElement>) => {
@@ -51,6 +81,55 @@ const Cart = () => {
       }))
     )
   }
+
+  const handleTypeQuantity = (purchaseIndex: number) => (value: number) => {
+    setExtendedPurchases(
+      produce((draft) => {
+        draft[purchaseIndex].buy_count = value
+      })
+    )
+  }
+
+  const handleQuantity = (purchaseIndex: number, value: number, enable: boolean) => {
+    if (enable) {
+      const purchase = extendedPurchases[purchaseIndex]
+      setExtendedPurchases(
+        produce((draft) => {
+          draft[purchaseIndex].disabled = true
+        })
+      )
+      updatePurchaseMutation.mutate({ product_id: purchase.product._id, buy_count: value })
+    }
+  }
+
+  const handleDelete = (purchaseIndex: number) => () => {
+    const purchaseId = extendedPurchases[purchaseIndex]._id
+    deletePurchasesMutation.mutate([purchaseId])
+  }
+
+  const handleDeleteManyPurchases = () => {
+    const purchaseIds = checkedPurchases.map((purchase) => purchase._id)
+    deletePurchasesMutation.mutate(purchaseIds)
+  }
+
+  const totalCheckedPurchasePrice = checkedPurchases.reduce((result, current) => {
+    return result + current.product.price * current.buy_count
+  }, 0)
+
+  const totalCheckedPurchaseSavingPrice = checkedPurchases.reduce((result, current) => {
+    return result + (current.product.price_before_discount - current.product.price) * current.buy_count
+  }, 0)
+
+  const handleBuyPurchases = () => {
+    if (checkedPurchases.length > 0) {
+      const body = checkedPurchases.map((purchase) => ({
+        product_id: purchase.product._id,
+        buy_count: purchase.buy_count
+      }))
+      buyProductsMutation.mutate(body)
+    }
+  }
+
   return (
     <div className='min-h-[100vh] bg-contain-gray sm:p-3'>
       <div className='sm:container'>
@@ -82,8 +161,8 @@ const Cart = () => {
             <div className='mb-3 rounded-sm bg-white px-2 text-[12px] sm:px-3 sm:text-[14px]'>
               {extendedPurchases?.map((prod, index) => {
                 return (
-                  <>
-                    <div key={prod._id} className='grid grid-cols-12 items-center px-3 py-5 sm:px-7'>
+                  <div key={index}>
+                    <div className='grid grid-cols-12 items-center border-b px-3 py-5 sm:px-7'>
                       <div className='col-span-6'>
                         <div className='flex items-center'>
                           <input
@@ -116,19 +195,34 @@ const Cart = () => {
                             <div>₫{formatCurrency(prod.price)}</div>
                           </div>
                           <div className='col-span-1 text-center'>
-                            <Controls.QuantityController value={prod.buy_count} />
+                            <Controls.QuantityController
+                              value={prod.buy_count}
+                              max={prod.product.quantity}
+                              onIncrease={(value) => handleQuantity(index, value, value <= prod.product.quantity)}
+                              onDecrease={(value) => handleQuantity(index, value, value >= 1)}
+                              onType={handleTypeQuantity(index)}
+                              onFocusOut={(value) =>
+                                handleQuantity(
+                                  index,
+                                  value,
+                                  value >= 1 &&
+                                    value <= prod.product.quantity &&
+                                    value !== (purchases as Purchase[])[index]?.buy_count
+                                )
+                              }
+                              disabled={prod.disabled}
+                            />
                           </div>
                           <div className='col-span-1 text-center text-main-orange'>
                             ₫{formatCurrency(prod.price * prod.buy_count)}
                           </div>
                           <div className='col-span-1 text-center hover:text-main-orange'>
-                            <Controls.Button>Xóa</Controls.Button>
+                            <Controls.Button onClick={handleDelete(index)}>Xóa</Controls.Button>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div className='border-t last:border-t-0'></div>
-                  </>
+                  </div>
                 )
               })}
             </div>
@@ -149,21 +243,29 @@ const Cart = () => {
               <div>({extendedPurchases.length})</div>
             </button>
             <div className='text-[13px] sm:text-[16px]'>
-              <Controls.Button>Xóa</Controls.Button>
+              <Controls.Button onClick={handleDeleteManyPurchases}>Xóa</Controls.Button>
             </div>
           </div>
           <div className='flex flex-col sm:flex-row sm:items-center'>
             <div className='flex items-center'>
-              <div className='mr-1 text-[13px] sm:mr-4 sm:text-[16px]'>Tổng thanh toán (5 sản phẩm):</div>
+              <div className='mr-1 text-[13px] sm:mr-4 sm:text-[16px]'>
+                Tổng thanh toán ({checkedPurchasesCount} sản phẩm):
+              </div>
               <div className='mr-1 sm:mr-4 sm:text-center'>
-                <div className='text-lg text-main-orange sm:text-2xl'>₫{formatCurrency(178000)}</div>
+                <div className='text-lg text-main-orange sm:text-2xl'>₫{formatCurrency(totalCheckedPurchasePrice)}</div>
                 <div className='flex items-center text-[10px] sm:text-[14px]'>
                   <div className='mr-2 text-gray-800 sm:mr-4'>Tiết kiệm</div>
-                  <div className='text-main-orange'>₫{formatCurrency(178000)}</div>
+                  <div className='text-main-orange'>₫{formatCurrency(totalCheckedPurchaseSavingPrice)}</div>
                 </div>
               </div>
               <div className='flex h-8 w-20 items-center justify-center rounded-sm bg-main-orange hover:opacity-70 sm:h-10 sm:w-[13.125rem]'>
-                <Controls.Button className='text-[14px] capitalize text-white'>Mua hàng</Controls.Button>
+                <Controls.Button
+                  className='text-[14px] capitalize text-white'
+                  onClick={handleBuyPurchases}
+                  disabled={buyProductsMutation.isLoading}
+                >
+                  Mua hàng
+                </Controls.Button>
               </div>
             </div>
           </div>

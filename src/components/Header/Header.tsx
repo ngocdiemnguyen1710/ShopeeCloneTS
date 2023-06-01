@@ -199,7 +199,7 @@ const Header = () => {
                   <Cart className='h-7 w-7' />
                 </Link>
 
-                {purchases && (
+                {purchases !== undefined && purchases.length > 0 && (
                   <div className='absolute right-3 top-2 flex h-5 w-8 items-center justify-center rounded-full border-[0.125rem] border-[#ee4d2d] bg-white'>
                     <span className='text-sm text-main-orange'>{handleLimitNumber(purchases.length)}</span>
                   </div>
