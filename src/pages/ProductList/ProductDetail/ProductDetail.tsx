@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useLocation, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import productApi from 'src/apis/product.api'
 import { ArrowLeftProductDetailSlider, ArrowRightProductDetailSlider, CartButton } from 'src/components/IconSvg'
 import Controls from 'src/components/controls/Controls'
@@ -12,10 +12,11 @@ import ProductItem from '../components/ProductItem'
 import purchaseApi from 'src/apis/purchase.api'
 import { toast } from 'react-hot-toast'
 import { PurchasesStatus } from 'src/constants/purchase'
+import { path } from 'src/constants/path'
 
 const ProductDetail = () => {
   const [buyCount, setBuyCount] = useState(1)
-
+  const navigate = useNavigate()
   const location = useLocation()
   const { nameId } = useParams()
   const id = getIdFromNameId(nameId as string)
@@ -49,7 +50,7 @@ const ProductDetail = () => {
     enabled: Boolean(product) //Khi nào có sản phẩm mới gọi api
   })
 
-  const mutationPurchase = useMutation({
+  const addToCartMutation = useMutation({
     mutationFn: (body: { product_id: string; buy_count: number }) => purchaseApi.addToCart(body)
   })
 
@@ -108,7 +109,7 @@ const ProductDetail = () => {
   }
 
   const addToCart = () => {
-    return mutationPurchase.mutate(
+    return addToCartMutation.mutate(
       { product_id: product?._id as string, buy_count: buyCount },
       {
         onSuccess: (data) => {
@@ -117,6 +118,16 @@ const ProductDetail = () => {
         }
       }
     )
+  }
+
+  const buyNow = async () => {
+    const res = await addToCartMutation.mutateAsync({ product_id: product?._id as string, buy_count: buyCount })
+    const purchase = res.data.data
+    navigate(path.cart, {
+      state: {
+        purchaseId: purchase._id
+      }
+    })
   }
 
   if (!product) return null
@@ -219,7 +230,10 @@ const ProductDetail = () => {
                     <CartButton className='mr-2.5 h-5 w-5 fill-main-orange stroke-main-orange' />
                     <span className='capitalize text-main-orange'>Thêm vào giỏ hàng</span>
                   </Controls.Button>
-                  <Controls.Button className='h-12 rounded-sm border border-main-orange bg-main-orange px-5 hover:opacity-70'>
+                  <Controls.Button
+                    onClick={buyNow}
+                    className='h-12 rounded-sm border border-main-orange bg-main-orange px-5 hover:opacity-70'
+                  >
                     <span className='capitalize text-white'>mua ngay</span>
                   </Controls.Button>
                 </div>

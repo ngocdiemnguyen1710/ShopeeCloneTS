@@ -61,7 +61,7 @@ const Header = () => {
             }
           >
             <div className='rounded-sm bg-white shadow-md'>
-              {purchases ? (
+              {purchases && purchases.length > 0 ? (
                 <div className='w-[370px]'>
                   <div className='w-full p-3 text-[0.875rem] capitalize text-gray-300'>Sản phẩm mới thêm</div>
                   <ul className='flex w-full flex-col items-center justify-start bg-white text-[#333]'>
