@@ -11,7 +11,8 @@ import { CartProvider } from './contexts/cart.context'
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      refetchOnWindowFocus: false
+      refetchOnWindowFocus: false,
+      retry: 0 //báo lỗi 1 lần thay vì báo lỗi 3 lần
     }
   }
 })

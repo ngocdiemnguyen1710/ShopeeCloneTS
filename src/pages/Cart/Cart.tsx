@@ -3,7 +3,7 @@ import { produce } from 'immer'
 import { keyBy } from 'lodash'
 import { ChangeEvent, useEffect, useMemo } from 'react'
 import { toast } from 'react-hot-toast'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import purchaseApi from 'src/apis/purchase.api'
 import Controls from 'src/components/controls/Controls'
 import { path } from 'src/constants/path'
@@ -16,7 +16,6 @@ import NoCart from '../../assets/images/no-cart.png'
 const Cart = () => {
   const { extendedPurchases, setExtendedPurchases } = useCart()
   const location = useLocation()
-  const navigate = useNavigate()
   const { data: purchasesInCart, refetch } = useQuery({
     queryKey: ['purchases', { status: PurchasesStatus.inCart }],
     queryFn: () => purchaseApi.getPurchases({ status: PurchasesStatus.inCart })
@@ -298,12 +297,9 @@ const Cart = () => {
                     Giỏ hàng của bạn còn trống
                   </div>
                   <div className='flex h-8 w-10 items-center justify-center rounded-sm bg-main-orange hover:opacity-70 sm:h-10 sm:w-[10.125rem]'>
-                    <Controls.Button
-                      className='text-[14px] uppercase text-white'
-                      onClick={() => navigate(path.product)}
-                    >
+                    <Link className='text-[14px] uppercase text-white' to={path.product}>
                       Mua hàng
-                    </Controls.Button>
+                    </Link>
                   </div>
                 </div>
               </>
