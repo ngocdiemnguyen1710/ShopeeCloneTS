@@ -11,6 +11,9 @@ import { path } from './constants/path'
 import ProductDetail from './pages/ProductList/ProductDetail'
 import Cart from './pages/Cart'
 import CartLayout from './layouts/CartLayout'
+import UserLayout from './pages/User/layouts/UserLayout'
+import ChangePassword from './pages/User/pages/ChangePassword'
+import HistoryPurchase from './pages/User/pages/HistoryPurchase'
 
 const useRouteElements = () => {
   const ProtectedRoute = () => {
@@ -44,8 +47,22 @@ const useRouteElements = () => {
           element: <ProtectedRoute />,
           children: [
             {
-              path: path.profile,
-              element: <Profile />
+              path: path.user,
+              element: <UserLayout />,
+              children: [
+                {
+                  path: path.profile,
+                  element: <Profile />
+                },
+                {
+                  path: path.changePassword,
+                  element: <ChangePassword />
+                },
+                {
+                  path: path.historyPurchase,
+                  element: <HistoryPurchase />
+                }
+              ]
             },
             {
               path: path.cart,
