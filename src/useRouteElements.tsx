@@ -5,7 +5,6 @@ import Register from './pages/Register'
 import RegisterLayout from './layouts/RegisterLayout'
 import MainLayout from './layouts/MainLayout'
 import HomePage from './pages/HomePage'
-import Profile from './pages/Profile'
 import { useAuth } from './contexts/auth.context'
 import { path } from './constants/path'
 import ProductDetail from './pages/ProductList/ProductDetail'
@@ -14,6 +13,7 @@ import CartLayout from './layouts/CartLayout'
 import UserLayout from './pages/User/layouts/UserLayout'
 import ChangePassword from './pages/User/pages/ChangePassword'
 import HistoryPurchase from './pages/User/pages/HistoryPurchase'
+import Profile from './pages/User/pages/Profile'
 
 const useRouteElements = () => {
   const ProtectedRoute = () => {
