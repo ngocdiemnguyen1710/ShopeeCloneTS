@@ -2,6 +2,7 @@ import { useFloating, useHover, useInteractions, offset, FloatingArrow, arrow, s
 import { AnimatePresence, motion } from 'framer-motion'
 import { ReactNode, useId, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { AvatarDefault } from '../IconSvg'
 
 interface ProperProps {
   children?: ReactNode
@@ -13,7 +14,15 @@ interface ProperProps {
   renderProp?: any
 }
 
-const Popper = ({ children, className, iconLeft, name, iconRight, src, renderProp }: ProperProps) => {
+const Popper = ({
+  children,
+  className,
+  iconLeft = <AvatarDefault className='stroke-[#c6c6c6]' />,
+  name,
+  iconRight,
+  src,
+  renderProp
+}: ProperProps) => {
   const [isOpen, setIsOpen] = useState(false)
 
   const arrowRef = useRef(null)

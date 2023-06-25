@@ -1,4 +1,6 @@
 import axios, { AxiosError, HttpStatusCode } from 'axios'
+import { AvatarDefault } from 'src/components/IconSvg'
+import config from 'src/constants/config'
 
 export function isAxiosError<T>(error: unknown): error is AxiosError<T> {
   // eslint-disable-next-line import/no-named-as-default-member
@@ -42,4 +44,8 @@ export const handleLimitNumber = (status: number | string) => {
   if (Number(status) > 99) {
     return (status = '99+')
   }
+}
+
+export const getAvatarUrl = (avatarName?: string) => {
+  return `${config.baseUrl}images/${avatarName}`
 }

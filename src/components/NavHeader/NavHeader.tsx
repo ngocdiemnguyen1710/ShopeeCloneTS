@@ -9,6 +9,7 @@ import { path } from 'src/constants/path'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import authApi from 'src/apis/auth.api'
 import { PurchasesStatus } from 'src/constants/purchase'
+import { getAvatarUrl } from 'src/utils/utils'
 
 const NavHeader = () => {
   const { isAuthenticated, setIsAuthenticated, profile, setProfile } = useAuth()
@@ -101,8 +102,7 @@ const NavHeader = () => {
           )}
           {isAuthenticated && (
             <Popper
-              iconLeft={<AvatarDefault className='stroke-[#c6c6c6]' />}
-              src={profile?.avatar}
+              src={getAvatarUrl(profile?.avatar)}
               name={profile?.email}
               className='h-5 w-5 rounded-full bg-[#f5f5f5] p-1'
             >
