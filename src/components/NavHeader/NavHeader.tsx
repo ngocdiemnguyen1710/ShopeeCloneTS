@@ -104,7 +104,7 @@ const NavHeader = () => {
             <Popper
               src={getAvatarUrl(profile?.avatar)}
               name={profile?.email}
-              className='h-5 w-5 rounded-full bg-[#f5f5f5] p-1'
+              className='h-5 w-5 overflow-hidden rounded-full bg-[#f5f5f5] p-1'
             >
               <ul className='relative flex w-[9.375rem] flex-col items-center justify-start rounded-sm bg-white text-[#333] shadow-md'>
                 <li className='w-full cursor-pointer p-3 hover:bg-[#fafafa] hover:text-[#00bfa5]'>

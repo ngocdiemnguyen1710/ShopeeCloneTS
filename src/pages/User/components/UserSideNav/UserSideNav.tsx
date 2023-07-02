@@ -15,9 +15,9 @@ const UserSideNav = () => {
     <>
       <div className='flex items-center border-b py-[15px]'>
         <div className='flex items-center'>
-          <div className='flex h-[50px] w-[50px] items-center justify-center rounded-full border'>
+          <div className='flex h-[50px] w-[50px] items-center justify-center overflow-hidden rounded-full border'>
             {profile?.avatar ? (
-              <img src={getAvatarUrl(profile.avatar)} alt='avatar' />
+              <img src={getAvatarUrl(profile.avatar)} alt='avatar' className='h-full w-full' />
             ) : (
               <AvatarDefault className='h-6 w-6 stroke-[#c6c6c6]' />
             )}
