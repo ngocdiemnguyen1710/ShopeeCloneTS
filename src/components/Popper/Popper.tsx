@@ -48,7 +48,7 @@ const Popper = ({
       <div className='relative z-10 px-1.5' ref={refs.setReference} id={id}>
         {renderProp}
         <Link to={'#'} className='flex items-center gap-1 hover:brightness-90'>
-          <div className={className}>{src ? <img src={src} alt='avatar' /> : iconLeft}</div>
+          <div className={className}>{src ? <img src={src} alt='avatar' className='h-full w-full' /> : iconLeft}</div>
           {name && <span className='text-white'>{name}</span>}
           {iconRight}
         </Link>
