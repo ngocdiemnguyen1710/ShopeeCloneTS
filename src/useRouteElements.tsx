@@ -14,6 +14,7 @@ import UserLayout from './pages/User/layouts/UserLayout'
 import ChangePassword from './pages/User/pages/ChangePassword'
 import HistoryPurchase from './pages/User/pages/HistoryPurchase'
 import Profile from './pages/User/pages/Profile'
+import NotFound from './pages/NotFound'
 
 const useRouteElements = () => {
   const ProtectedRoute = () => {
@@ -67,6 +68,10 @@ const useRouteElements = () => {
             {
               path: path.cart,
               element: <Cart />
+            },
+            {
+              path: '*',
+              element: <NotFound />
             }
           ]
         }
