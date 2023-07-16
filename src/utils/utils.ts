@@ -1,5 +1,4 @@
 import axios, { AxiosError, HttpStatusCode } from 'axios'
-import { AvatarDefault } from 'src/components/IconSvg'
 import config from 'src/constants/config'
 
 export function isAxiosError<T>(error: unknown): error is AxiosError<T> {

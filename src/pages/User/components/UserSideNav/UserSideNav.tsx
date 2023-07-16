@@ -1,4 +1,4 @@
-import { Link, NavLink, useLocation } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import { AvatarDefault, EditIcon } from 'src/components/IconSvg'
 import Controls from 'src/components/controls/Controls'
 import { path } from 'src/constants/path'
@@ -65,7 +65,7 @@ const UserSideNav = () => {
           <NavLink
             to={path.changePassword}
             className={({ isActive }) =>
-              classNames('mb-4 transition-colors', {
+              classNames('transition-colors', {
                 'text-main-orange': isActive,
                 'text-[rgba(0,0,0,.87)] hover:text-main-orange': !isActive
               })
@@ -77,7 +77,7 @@ const UserSideNav = () => {
         <NavLink
           to={path.historyPurchase}
           className={({ isActive }) =>
-            classNames('mb-4 mr-4 flex items-center transition-colors', {
+            classNames('mr-4 flex items-center transition-colors', {
               'text-main-orange': isActive,
               'text-[rgba(0,0,0,.87)] hover:text-main-orange': !isActive
             })
