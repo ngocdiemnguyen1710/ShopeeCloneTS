@@ -17,7 +17,7 @@ interface ProperProps {
 const Popper = ({
   children,
   className,
-  iconLeft = <AvatarDefault className='stroke-[#c6c6c6]' />,
+  iconLeft = <AvatarDefault className='overflow-hidden stroke-[#c6c6c6]' />,
   name,
   iconRight,
   src,
@@ -47,8 +47,10 @@ const Popper = ({
     <>
       <div className='relative z-10 px-1.5' ref={refs.setReference} id={id}>
         {renderProp}
-        <Link to={'#'} className='flex items-center gap-1 hover:brightness-90'>
-          <div className={className}>{src ? <img src={src} alt='avatar' className='h-full w-full' /> : iconLeft}</div>
+        <Link to={'#'} className='flex items-center gap-1 overflow-hidden hover:brightness-90'>
+          <div className={className}>
+            {src ? <img src={src} alt='avatar' className='h-full w-full object-cover' /> : iconLeft}
+          </div>
           {name && <span className='text-white'>{name}</span>}
           {iconRight}
         </Link>
