@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { ReactNode, useId, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { AvatarDefault } from '../IconSvg'
+import { getAvatarUrl } from 'src/utils/utils'
 
 interface ProperProps {
   children?: ReactNode
@@ -17,7 +18,7 @@ interface ProperProps {
 const Popper = ({
   children,
   className,
-  iconLeft = <AvatarDefault className='overflow-hidden stroke-[#c6c6c6]' />,
+  iconLeft = <AvatarDefault className='overflow-hidden stroke-[#c6c6c6] p-1' />,
   name,
   iconRight,
   src,
@@ -49,7 +50,7 @@ const Popper = ({
         {renderProp}
         <Link to={'#'} className='flex items-center gap-1 overflow-hidden hover:brightness-90'>
           <div className={className}>
-            {src ? <img src={src} alt='avatar' className='h-full w-full object-cover' /> : iconLeft}
+            {src ? <img src={getAvatarUrl(src)} alt='avatar' className='h-full w-full object-cover' /> : iconLeft}
           </div>
           {name && <span className='text-white'>{name}</span>}
           {iconRight}

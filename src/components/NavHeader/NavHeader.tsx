@@ -102,7 +102,7 @@ const NavHeader = () => {
           )}
           {isAuthenticated && (
             <Popper
-              src={getAvatarUrl(profile?.avatar)}
+              src={profile?.avatar}
               name={profile?.email}
               className='h-5 w-5 overflow-hidden rounded-full bg-[#f5f5f5]'
             >
@@ -113,7 +113,7 @@ const NavHeader = () => {
                   </Link>
                 </li>
                 <li className='w-full cursor-pointer p-3 hover:bg-[#fafafa] hover:text-[#00bfa5]'>
-                  <Link to=''>
+                  <Link to={path.historyPurchase}>
                     <span className='capitalize '>Đơn mua</span>
                   </Link>
                 </li>
