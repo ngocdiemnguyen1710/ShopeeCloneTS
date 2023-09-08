@@ -11,6 +11,7 @@ import { NoUndefinedField } from 'src/types/utils.type'
 import RatingStar from '../RatingStar'
 import omit from 'lodash/omit'
 import { QueryConfig } from 'src/hooks/useQueryConfig'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   categories: Category[]
@@ -22,6 +23,7 @@ type FormData = NoUndefinedField<Pick<Schema, 'price_max' | 'price_min'>>
 const priceSchema = schema.pick(['price_min', 'price_max'])
 const Aside = ({ categories, queryConfig }: Props) => {
   const { category } = queryConfig
+  const {t} = useTranslation('home')
   const navigate = useNavigate()
   const {
     handleSubmit,
@@ -68,7 +70,7 @@ const Aside = ({ categories, queryConfig }: Props) => {
               'text-main-orange': !category
             })}
           >
-            Tất cả danh mục
+            {t('aside filter.all categories')}
           </span>
         </Link>
         <div className='h-px bg-gray-300'></div>
@@ -105,7 +107,7 @@ const Aside = ({ categories, queryConfig }: Props) => {
       <div className='w-full'>
         <div className='flex items-center'>
           <FilterIcon className={'mr-3 h-3 w-3 stroke-current'} />
-          <span className='font-bold uppercase'>Bộ lọc tìm kiếm</span>
+          <span className='font-bold uppercase'>{t('aside filter.filter search')}</span>
         </div>
         <form className='my-5 w-full' onSubmit={onSubmit}>
           <div className='mb-4 capitalize'>Khoảng giá</div>
