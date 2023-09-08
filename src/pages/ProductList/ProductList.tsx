@@ -10,6 +10,7 @@ import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import categoryApi from 'src/apis/category.api'
 import useQueryConfig from 'src/hooks/useQueryConfig'
+import { Helmet } from 'react-helmet-async'
 
 const slides = [
   {
@@ -60,6 +61,10 @@ const ProductList = () => {
 
   return (
     <div className='min-w-[100vh] bg-contain-gray p-3 text-main-black'>
+      <Helmet>
+        <title>Danh sách sản phẩm | Shopee Clone</title>
+        <meta name='description' content='Đây là dự án Shopee Clone' />
+      </Helmet>
       <div className='container'>
         <div className='mt-4 h-[350px]'>
           <Slider slides={slides} />

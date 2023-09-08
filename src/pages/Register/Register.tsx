@@ -14,6 +14,7 @@ import { ErrorRespone } from 'src/types/utils.type'
 import { useAuth } from 'src/contexts/auth.context'
 import Controls from 'src/components/controls/Controls'
 import { path } from 'src/constants/path'
+import { Helmet } from 'react-helmet-async'
 
 type FormData = Pick<Schema, 'email' | 'password' | 'confirm_password'>
 
@@ -74,6 +75,10 @@ const Register = () => {
 
   return (
     <div className=' bg-main-orange'>
+      <Helmet>
+        <title>Đăng kí | Shopee Clone</title>
+        <meta name='description' content='Đây là dự án Shopee Clone' />
+      </Helmet>
       <div className='container min-h-[600px] bg-register-img bg-center bg-no-repeat'>
         <div className='grid grid-cols-1 py-12 lg:grid-cols-5 lg:py-32 lg:pr-20'>
           <div className='lg:col-span-2 lg:col-start-4'>

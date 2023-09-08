@@ -9,12 +9,15 @@ import { path } from 'src/constants/path'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import authApi from 'src/apis/auth.api'
 import { PurchasesStatus } from 'src/constants/purchase'
-import { getAvatarUrl } from 'src/utils/utils'
+import { useTranslation } from 'react-i18next'
+import { locales } from 'src/i18n/i18n'
 
 const NavHeader = () => {
   const { isAuthenticated, setIsAuthenticated, profile, setProfile } = useAuth()
   const queryClient = useQueryClient()
-
+  const { i18n } = useTranslation()
+  const currentLanguage =  locales[i18n.language as keyof typeof locales]
+  
   const logoutMutation = useMutation({
     mutationFn: authApi.logoutAccount,
     onSuccess: () => {
@@ -25,6 +28,10 @@ const NavHeader = () => {
   })
   const handleLogout = () => {
     logoutMutation.mutate()
+  }
+
+  const changeLanguage = (lng: 'en' | 'vi') => {
+    i18n.changeLanguage(lng)
   }
 
   return (
@@ -77,12 +84,12 @@ const NavHeader = () => {
           </Link>
         </div>
 
-        <Popper iconLeft={<Language className='' />} iconRight={<ArrowDown className='ml-1' />} name={'Tiếng Việt'}>
+        <Popper iconLeft={<Language className='' />} iconRight={<ArrowDown className='ml-1' />} name={currentLanguage}>
           <ul className='flex min-w-[12.5rem] flex-col items-center justify-start rounded-sm bg-white text-[#333] shadow-md'>
-            <li className='w-full cursor-pointer p-3 hover:text-main-orange'>
+            <li className='w-full cursor-pointer p-3 hover:text-main-orange' onClick={() => changeLanguage('vi')}>
               <span className=''>Tiếng Việt</span>
             </li>
-            <li className='w-full cursor-pointer p-3 hover:text-main-orange'>
+            <li className='w-full cursor-pointer p-3 hover:text-main-orange' onClick={() => changeLanguage('en')}>
               <span className=''>English</span>
             </li>
           </ul>

@@ -13,6 +13,8 @@ import purchaseApi from 'src/apis/purchase.api'
 import { toast } from 'react-hot-toast'
 import { PurchasesStatus } from 'src/constants/purchase'
 import { path } from 'src/constants/path'
+import { convert } from 'html-to-text'
+import { Helmet } from 'react-helmet-async'
 
 const ProductDetail = () => {
   const [buyCount, setBuyCount] = useState(1)
@@ -133,6 +135,12 @@ const ProductDetail = () => {
   if (!product) return null
   return (
     <div className='min-w-[100vh] bg-contain-gray p-3 text-main-black'>
+      <Helmet>
+        <title>{product.name} | Shopee Clone</title>
+        <meta name='description' content={convert(product.description, {limits: {
+          maxInputLength: 150
+        }})} />
+      </Helmet>
       <div className='container'>
         <div className='mt-4 grid grid-cols-12 rounded-sm bg-white pb-[20px]'>
           <div className='col-span-5 p-[15px]'>

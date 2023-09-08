@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
+import { Helmet } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
 import { FaFacebook } from 'react-icons/fa'
 import { FcGoogle } from 'react-icons/fc'
@@ -56,6 +57,10 @@ const Login = () => {
   })
   return (
     <div className=' bg-main-orange'>
+      <Helmet>
+        <title>Đăng nhập | Shopee Clone</title>
+        <meta name='description' content='Đây là dự án Shopee Clone' />
+      </Helmet>
       <div className='container min-h-[600px] bg-register-img bg-contain bg-center bg-no-repeat'>
         <div className='grid grid-cols-1 py-12 lg:grid-cols-5 lg:py-32 lg:pr-20'>
           <div className='lg:col-span-2 lg:col-start-4'>
